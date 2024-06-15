@@ -1,7 +1,7 @@
 <!-- components/Footer.vue -->
 <template>
   <footer
-    class="bg-sopdf-400 border-box text-center fixed bottom-0 w-full z-10 h-5"
+    class="bg-sopdf-400 border-box text-center fixed bottom-0 w-full z-10 h-5 text-sm"
   >
     <!-- 这里放置你的底部内容，如版权信息、联系方式等 -->
     <p>&copy; 2024 Your Company Name. All rights reserved.</p>
