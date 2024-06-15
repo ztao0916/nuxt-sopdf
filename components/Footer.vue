@@ -5,7 +5,7 @@
   >
     <!-- 这里放置你的底部内容，如版权信息、联系方式等 -->
     <div class="w-[1024px] flex justify-center items-center">
-      <div class="w-[520px] flex justify-between">
+      <div class="w-[400px] flex justify-between">
         <p><NuxtLink to="/about">关于</NuxtLink></p>
         <p><NuxtLink to="/connect">联系</NuxtLink></p>
         <p>SOPDF版权所有</p>
