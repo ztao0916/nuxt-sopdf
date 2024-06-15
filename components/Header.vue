@@ -1,6 +1,8 @@
 <!-- components/Header.vue -->
 <template>
-  <header class="bg-gray-100 p-4 text-xl sticky top-0 w-full z-10">
+  <header
+    class="bg-gray-100 text-lg sticky top-0 w-full z-10 h-14 leading-[3.5rem]"
+  >
     <!-- 这里放置你的头部内容，如logo、导航菜单等 -->
     <nav>
       <ul>

@@ -1,7 +1,15 @@
 <template>
-  <div class="bg-sky-100 py-2 h-full">
+  <div class="bg-sky-100 h-full flex flex-col">
     <Header />
-    <slot name="default" />
+    <main class="flex-grow mb-5 bg-sopdf-400">
+      <slot name="default" />
+    </main>
     <Footer />
   </div>
 </template>
+
+<style lang="css" scoped>
+  .flex-grow {
+    flex-grow: 1;
+  }
+</style>
