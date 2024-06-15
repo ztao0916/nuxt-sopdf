@@ -1,14 +1,18 @@
-<!-- components/Header.vue -->
 <template>
   <header
-    class="bg-sopdf-100 text-lg text-white sticky top-0 w-full z-10 h-14 leading-[3.5rem]"
+    class="bg-sopdf-100 text-lg text-white sticky top-0 w-full z-10 h-14 leading-[3.5rem] border-box px-16"
   >
-    <!-- 这里放置你的头部内容，如logo、导航菜单等 -->
-    <nav>
-      <ul>
-        <li><NuxtLink to="/">首页</NuxtLink></li>
-      </ul>
-    </nav>
+    <div class="flex">
+      <div class="bg-blue-400 flex-grow">
+        <div>头部左侧</div>
+      </div>
+      <div class="bg-red-400 w-[800px] text-center">
+        <div>头部中间</div>
+      </div>
+      <div class="bg-green-400 flex-grow text-right">
+        <div>头部右侧</div>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -16,6 +20,4 @@
   // 如果需要，可以在这里导入外部依赖或声明props
 </script>
 
-<style scoped>
-  /* 在这里添加组件专属的样式 */
-</style>
+<style lang="css" scoped></style>
