@@ -1,19 +1,7 @@
 <template>
-  <div class="default-layout">
-    <header>
-      <h1>头部</h1>
-    </header>
-    <section>
-      <slot />
-    </section>
-    <footer>
-      <h1>底部</h1>
-    </footer>
+  <div class="bg-sky-100 py-2 h-full">
+    <Header />
+    <slot name="default" />
+    <Footer />
   </div>
 </template>
-
-<style>
-  .default-layout {
-    color: red;
-  }
-</style>

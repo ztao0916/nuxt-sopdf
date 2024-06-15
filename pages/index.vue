@@ -1,6 +1,11 @@
 <template>
-  <div>
-    <h1>欢迎来到首页</h1>
-    <AppAlert> 这是一个自动导入的组件。 </AppAlert>
+  <div class="mx-6 mb-4 bg-white py-24">
+    <div class="flex flex-col items-center">
+      <h1 class="text-6xl font-semibold text-gray-800">这里是首页</h1>
+      <div class="my-4 flex space-x-4">
+        <NuxtLink to="/about">前往 About</NuxtLink>
+        <NuxtLink to="/contact">前往 Contact</NuxtLink>
+      </div>
+    </div>
   </div>
 </template>

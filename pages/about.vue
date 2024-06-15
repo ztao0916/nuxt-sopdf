@@ -1,5 +1,10 @@
 <template>
-  <section>
-    <p>此页面将显示在 /about 路由。</p>
-  </section>
+  <div class="mx-6 mb-4 bg-slate-50 py-24">
+    <div class="flex flex-col items-center">
+      <h1 class="text-6xl font-semibold text-yellow-400">
+        大家好！我是 Potato
+      </h1>
+      <p class="my-8 text-3xl text-gray-600">这里是 /about</p>
+    </div>
+  </div>
 </template>
