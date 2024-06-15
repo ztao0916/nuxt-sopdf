@@ -9,8 +9,11 @@
       <div class="bg-red-400 w-[800px] text-center">
         <div>头部中间</div>
       </div>
-      <div class="bg-green-400 flex-grow text-right">
-        <div>头部右侧</div>
+      <div class="flex-grow text-right">
+        <NuxtLink to="/login" class="flex justify-end items-center">
+          <div class="mr-1">登录/注册</div>
+          <user-avatar class="text-[30px]" />
+        </NuxtLink>
       </div>
     </div>
   </header>
@@ -20,4 +23,8 @@
   // 如果需要，可以在这里导入外部依赖或声明props
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+  .svg-color-white {
+    color: #fff !important;
+  }
+</style>
