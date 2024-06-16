@@ -6,6 +6,25 @@
   const switchStatus = (status: string) => {
     userStatus.value = status;
   };
+  //是否展示时间
+  const showTime = ref(false);
+  const startTime = ref(30); //倒计时30s
+  //倒计时,需要清除定时器
+  const countDown = () => {
+    let timer = setInterval(() => {
+      startTime.value--;
+      if (startTime.value == 0) {
+        clearInterval(timer);
+        showTime.value = false;
+        startTime.value = 30;
+      }
+    }, 1000);
+  };
+  const sendCodeHandle = () => {
+    console.log("发送验证码");
+    countDown();
+    showTime.value = true;
+  };
 </script>
 
 <template>
@@ -46,8 +65,16 @@
         <span class="text-sopdf-600">|</span>
         <div
           class="text-sopdf-400 w-[130px] text-sm cursor-pointer px-2 box-border"
+          v-if="!showTime"
+          @click="sendCodeHandle"
         >
           获取验证码
+        </div>
+        <div
+          v-else
+          class="text-sopdf-400 w-[130px] text-sm px-2 box-border text-center cursor-not-allowed"
+        >
+          {{ startTime }} 秒
         </div>
       </div>
       <div class="login-agreement">
