@@ -3,5 +3,5 @@
 import { defineNuxtConfig } from "nuxt/config";
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: ["@pinia/nuxt", "@nuxt/ui", "@nuxt/image"],
+  modules: ["@pinia/nuxt", "@nuxt/ui"],
 });

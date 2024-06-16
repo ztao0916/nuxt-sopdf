@@ -20,8 +20,17 @@
       }
     }, 1000);
   };
+  //发送验证码
+  const toast = useToast();
+  const phoneNum = ref("");
+  const code = ref("");
   const sendCodeHandle = () => {
     console.log("发送验证码");
+    //如果没有手机号码,不允许发送,并提醒
+    if (!phoneNum.value) {
+      toast.add({ title: "请输入手机号!" });
+      return;
+    }
     countDown();
     showTime.value = true;
   };
@@ -34,14 +43,13 @@
     >
       <div class="login-title cursor-pointer">
         <span
-          class="m-1.5"
+          class="pr-2"
           :class="{ 'font-bold': userStatus == 'login' }"
           @click="switchStatus('login')"
           >登录</span
         >
-        <span>|</span>
         <span
-          class="m-1.5"
+          class="border-l-[1px] box-border pl-2"
           :class="{ 'font-bold': userStatus == 'register' }"
           @click="switchStatus('register')"
           >注册</span
@@ -53,6 +61,7 @@
           class="w-full"
           color="white"
           variant="none"
+          v-model="phoneNum"
         />
       </div>
       <div class="login-input border rounded flex items-center">
@@ -61,10 +70,10 @@
           class="w-full"
           color="white"
           variant="none"
+          v-model="code"
         />
-        <span class="text-sopdf-600">|</span>
         <div
-          class="text-sopdf-400 w-[130px] text-sm cursor-pointer px-2 box-border"
+          class="text-sopdf-400 w-[130px] text-sm cursor-pointer px-2 box-border border-l-[1px] pl-2"
           v-if="!showTime"
           @click="sendCodeHandle"
         >
@@ -72,7 +81,7 @@
         </div>
         <div
           v-else
-          class="text-sopdf-400 w-[130px] text-sm px-2 box-border text-center cursor-not-allowed"
+          class="text-sopdf-400 w-[130px] text-sm px-2 box-border text-center cursor-not-allowed border-l-[1px] pl-2"
         >
           {{ startTime }} 秒
         </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col">
     <Header />
-    <main class="flex-grow mb-5 bg-sopdf-400 flex justify-center box-border">
+    <main class="flex-grow mb-5 bg-sopdf-700 flex justify-center box-border">
       <slot name="default" />
     </main>
     <Footer />
