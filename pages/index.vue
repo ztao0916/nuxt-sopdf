@@ -8,3 +8,12 @@
     </div>
   </div>
 </template>
+
+<script lang="ts" setup>
+  const route = useRoute();
+
+  const data = await useFetch(`/api/web/index`, {
+    server: false,
+  });
+  console.log(data);
+</script>
