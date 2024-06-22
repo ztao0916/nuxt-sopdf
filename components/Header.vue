@@ -16,7 +16,7 @@
           </div>
         </NuxtLink>
       </div>
-      <div class="w-[800px] flex justify-center">
+      <div class="w-[800px] flex">
         <div
           class="header-search w-[550px] h-8 leading-8 bg-white flex box-border items-center rounded-2xl justify-between"
         >
@@ -60,7 +60,6 @@
   }
   .logo-background {
     width: 100px; /* 设置div宽度为100px */
-    height: 100%; /* 设置div高度为100px */
     background-image: url("@/assets/img/logo.jpg"); /* 引入图片路径，记得处理URL路径问题 */
     background-repeat: no-repeat; /* 图片平铺并覆盖整个div，可能会裁剪图片以适应 */
     background-position: center; /* 图片位置居中 */

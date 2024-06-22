@@ -4,6 +4,7 @@ import { defineNuxtConfig } from "nuxt/config";
 //转发服务器
 const commonUrl = "http://122.51.119.99/api";
 export default defineNuxtConfig({
+  ssr: true,
   devtools: { enabled: false },
   modules: ["@nuxt/ui", "@element-plus/nuxt"],
   //项目是前后端分离的,所以要做代理转发,解决跨域问题
@@ -26,6 +27,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: "/api",
+      commonUrl: commonUrl,
     },
   },
 });
