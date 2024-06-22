@@ -2,10 +2,10 @@
 //别名@,默认内置
 import { defineNuxtConfig } from "nuxt/config";
 //转发服务器
-const commonUrl = "http://api.yinchunyu.com";
+const commonUrl = "http://122.51.119.99/api";
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: ["@nuxt/ui"],
+  modules: ["@nuxt/ui", "@element-plus/nuxt"],
   //项目是前后端分离的,所以要做代理转发,解决跨域问题
   nitro: {
     devProxy: {
@@ -21,6 +21,11 @@ export default defineNuxtConfig({
       "/api/**": {
         proxy: `${commonUrl}/**`,
       },
+    },
+  },
+  runtimeConfig: {
+    public: {
+      baseUrl: "/api",
     },
   },
 });

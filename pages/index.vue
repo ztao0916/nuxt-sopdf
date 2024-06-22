@@ -10,10 +10,12 @@
 </template>
 
 <script lang="ts" setup>
-  const route = useRoute();
-
-  const data = await useFetch(`/api/web/index`, {
-    server: false,
-  });
-  console.log(data);
+  // const data = await $useFetch(`/user/login`, {
+  //   server: false,
+  //   query: {
+  //     phone: 18238833070,
+  //     verificationCode: "SDSF5WEFDSG34",
+  //   },
+  // });
+  // console.log(data);
 </script>

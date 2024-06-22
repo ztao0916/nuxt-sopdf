@@ -21,14 +21,15 @@
     }, 1000);
   };
   //发送验证码
-  const toast = useToast();
   const phoneNum = ref("");
   const code = ref("");
   const sendCodeHandle = () => {
-    console.log("发送验证码");
     //如果没有手机号码,不允许发送,并提醒
     if (!phoneNum.value) {
-      toast.add({ title: "请输入手机号!" });
+      ElMessage({
+        message: "请输入手机号!",
+        type: "error",
+      });
       return;
     }
     countDown();

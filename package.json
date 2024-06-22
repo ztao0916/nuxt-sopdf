@@ -16,6 +16,8 @@
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
+    "@element-plus/nuxt": "^1.0.9",
+    "element-plus": "^2.7.6",
     "tailwindcss": "^3.4.4"
   }
 }
