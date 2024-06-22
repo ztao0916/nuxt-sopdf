@@ -79,7 +79,7 @@
                 >
                   <NuxtLink
                     class="text-blue-500 leading-5 border-b border-blue-500"
-                    :to="/detail/ + item.uuid"
+                    :to="/detail/ + item.uuid + '/' + content.pageIndex"
                   >
                     <span class="mr-1.5">第{{ content.pageIndex }}页</span>
                     <span v-html="content.name"></span>
