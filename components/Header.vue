@@ -36,7 +36,7 @@
       <div class="flex-grow text-right">
         <NuxtLink to="/login" class="flex justify-end items-center">
           <div class="mr-1">登录/注册</div>
-          <user-avatar class="text-[30px]" />
+          <SvgUserAvatar class="text-[30px]" />
         </NuxtLink>
       </div>
     </div>

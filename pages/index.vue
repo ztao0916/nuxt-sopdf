@@ -100,7 +100,7 @@
                         size="small"
                       >
                         展开更多
-                        <el-icon><CaretBottom /></el-icon>
+                        <SvgCaretBottom />
                       </el-button>
                     </div>
                   </div>
