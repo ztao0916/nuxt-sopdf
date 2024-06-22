@@ -1,4 +1,4 @@
-import { useFetch, type UseFetchOptions } from "#app";
+import { type UseFetchOptions } from "#app";
 
 function isArray(str: unknown) {
   return Object.prototype.toString.call(str) === "[object Array]";
@@ -14,7 +14,9 @@ export const $useFetch = <T = unknown>(
   const defaultOptions: UseFetchOptions<unknown> = {
     baseURL: runtimeConfig.public.baseUrl,
     onRequest({ options }) {
-      console.log("request", options);
+      // 设置请求头
+      options.headers = (options.headers || {}) as { [key: string]: string };
+      // console.log("request", options);
       // if (satoken.value) {
       //   options.headers = {
       //     ...options.headers,
@@ -25,16 +27,19 @@ export const $useFetch = <T = unknown>(
     onResponse({ response }) {
       // console.log("response", response);
       if (+response.status === 200 && +response._data.code !== 200) {
-        ElMessage.error(response._data.msg);
+        import.meta.client && ElMessage.error(response._data.msg);
       }
     },
     onResponseError({ response }) {
       // console.log("responseerror", response);
-      ElMessage.error(
-        isArray(response._data.msg) ? response._data.msg[0] : response._data.msg
-      );
+      import.meta.client &&
+        ElMessage.error(
+          isArray(response._data.msg)
+            ? response._data.msg[0]
+            : response._data.msg
+        );
     },
   };
 
-  return useFetch<T>(url, { ...defaultOptions, ...opts } as any);
+  return $fetch<T>(url, { ...defaultOptions, ...opts } as any);
 };

@@ -5,7 +5,7 @@
       PDF样册发布、广告位合作、侵权PDF样册处理、PDF样册勘误、意见或建议，请发送邮件至邮箱：
     </p>
     <p class="indent-8 break-all text-base lh30">
-      <font class="text-sopdf-100">sopdfservice@163.com。</font>
+      <span class="text-sopdf-100">sopdfservice@163.com。</span>
     </p>
 
     <p class="indent-8 break-all text-base lh30">

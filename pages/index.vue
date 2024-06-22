@@ -10,12 +10,8 @@
 </template>
 
 <script lang="ts" setup>
-  // const data = await $useFetch(`/user/login`, {
-  //   server: false,
-  //   query: {
-  //     phone: 18238833070,
-  //     verificationCode: "SDSF5WEFDSG34",
-  //   },
-  // });
-  // console.log(data);
+  const logindata = await $useFetch(`/lastRelease`, {
+    server: false,
+  });
+  console.log(logindata);
 </script>
