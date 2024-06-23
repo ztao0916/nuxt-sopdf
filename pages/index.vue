@@ -35,7 +35,9 @@
         <el-pagination
           layout="pager, next"
           next-text="下一页"
-          :total="totalNum"
+          :total="1000"
+          v-model:current-page="currentPage"
+          @current-change="handleCurrentChange"
         />
       </div>
     </div>
@@ -59,6 +61,12 @@
     totalNum.value = lastReleaseData.total;
     items.value = lastReleaseData.data;
   }
+  //分页
+  const currentPage = ref(1); //当前页
+  const handleCurrentChange = (val: number) => {
+    console.log(`current page: ${val}`);
+  };
+  //如果分页currentPage发生变化,就重新请求接口给items重新赋值
 </script>
 <style lang="css" scoped>
   .banner-img {
