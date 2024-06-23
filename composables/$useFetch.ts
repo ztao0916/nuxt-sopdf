@@ -9,7 +9,7 @@ export const $useFetch = <T = unknown>(
   opts: UseFetchOptions<T, unknown>
 ) => {
   const runtimeConfig = useRuntimeConfig();
-  // const satoken = useCookie("satoken");
+  const satoken = useCookie("satoken");
 
   const defaultOptions: UseFetchOptions<unknown> = {
     baseURL: runtimeConfig.public.baseUrl,
@@ -17,12 +17,9 @@ export const $useFetch = <T = unknown>(
       // 设置请求头
       options.headers = (options.headers || {}) as { [key: string]: string };
       // console.log("request", options);
-      // if (satoken.value) {
-      //   options.headers = {
-      //     ...options.headers,
-      //     satoken: satoken.value,
-      //   };
-      // }
+      if (satoken.value) {
+        options.headers.Authorization = "Bearer " + satoken.value;
+      }
     },
     onResponse({ response }) {
       // console.log("response", response);

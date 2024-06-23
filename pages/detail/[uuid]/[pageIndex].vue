@@ -68,11 +68,11 @@
       </div>
       <!-- 操作 -->
       <div class="flex justify-between leading-6 text-gray-400 my-2">
-        <div class="flex flex-1 text-sm cursor-pointer">
+        <div class="flex flex-1 text-sm">
           <SvgView class="w-4" />
           <span>浏览{{ pdfInfo.viewCount }}</span>
         </div>
-        <div class="flex flex-1 text-sm cursor-pointer">
+        <div class="flex flex-1 text-sm cursor-pointer" @click="collectHandle">
           <SvgStar class="w-4" />
           <span>收藏{{ pdfInfo.collectCount }}</span>
         </div>
@@ -123,6 +123,16 @@
   //获取到环境变量
   const runtimeConfig = useRuntimeConfig();
   const commonUrl = runtimeConfig.public.commonUrl;
+  //收藏事件
+  const collectHandle = async () => {
+    let result: any = await $useFetch("/pdf/recard/collect", {
+      server: false,
+      query: {
+        uuid: route.params.uuid,
+      },
+    });
+    console.log(result);
+  };
   //定位
   const sopdfObj = ref({}) as any;
   const scrollHandle = (pageIndex: any) => {

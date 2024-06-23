@@ -35,10 +35,29 @@
         </div>
       </div>
       <div class="flex-grow text-right">
-        <NuxtLink to="/login" class="flex justify-end items-center">
+        <NuxtLink
+          to="/login"
+          class="flex justify-end items-center"
+          v-if="!satoken"
+        >
           <div class="mr-1">登录/注册</div>
           <SvgUserAvatar class="text-[30px]" />
         </NuxtLink>
+        <div v-else class="flex justify-end items-center">
+          <el-dropdown trigger="click" @command="handleCommand">
+            <div class="el-dropdown-link flex leading-8 text-white">
+              <span>{{ phone }}</span>
+              <SvgCaretBottom class="w-4 text-white mt-2.5"></SvgCaretBottom>
+              <SvgUserAvatar class="text-[30px]" />
+            </div>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="profile">个人中心</el-dropdown-item>
+                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
       </div>
     </div>
   </header>
@@ -58,6 +77,29 @@
       // 跳转到搜索结果页面,使用vue3语法
       await navigateTo(`/search/${searchContent.value}`);
     }
+  };
+  //获取到是否有cookie
+  const satoken = useCookie("satoken");
+  const phone = useCookie("phone");
+  // @command="handleCommand"
+  const handleCommand = (command) => {
+    console.log(command);
+    switch (command) {
+      case "logout":
+        logOut();
+        break;
+      case "profile":
+        navigateTo("/profile");
+        break;
+    }
+  };
+  const logOut = () => {
+    satoken.value = "";
+    phone.value = "";
+    ElMessage({
+      message: "退出成功",
+      type: "success",
+    });
   };
 </script>
 

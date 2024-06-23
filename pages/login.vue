@@ -21,8 +21,8 @@
     }, 1000);
   };
   //发送验证码
-  const phoneNum = ref("");
-  const code = ref("");
+  const phoneNum = ref("18238833070");
+  const code = ref("SDSF5WEFDSG34");
   const sendCodeHandle = () => {
     //如果没有手机号码,不允许发送,并提醒
     if (!phoneNum.value) {
@@ -35,8 +35,35 @@
     countDown();
     showTime.value = true;
   };
-  //登录以后跳转到来时的页面
-  const router = useRouter();
+  //登录
+  const phoneCookie = useCookie<string | undefined>("phone");
+  const loginHandle = () => {
+    if (!import.meta.client) return;
+    if (!code.value) {
+      ElMessage({
+        message: "请输入验证码!",
+        type: "error",
+      });
+    } else {
+      $useFetch("/user/login", {
+        server: false,
+        query: {
+          phone: phoneNum.value,
+          verificationCode: code.value,
+        },
+      }).then((res: any) => {
+        if (res.code == 200) {
+          ElMessage({
+            message: "登录成功!",
+            type: "success",
+          });
+          phoneCookie.value = phoneNum.value;
+          //跳转回原来的页面
+          navigateTo(useRoute().query.redirect as string);
+        }
+      });
+    }
+  };
 </script>
 
 <template>
@@ -98,7 +125,11 @@
         </UCheckbox>
       </div>
       <div class="login-submit text-center">
-        <button type="button" class="w-full bg-sopdf-100 text-white">
+        <button
+          type="button"
+          class="w-full bg-sopdf-100 text-white"
+          @click="loginHandle"
+        >
           {{ userStatus == "login" ? "登录" : "注册" }}
         </button>
       </div>

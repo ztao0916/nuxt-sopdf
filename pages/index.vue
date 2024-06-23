@@ -36,7 +36,6 @@
           layout="pager, next"
           next-text="下一页"
           :total="totalNum"
-          :default-page-size="2"
           v-model:current-page="currentPage"
           @current-change="handleCurrentChange"
         />
@@ -52,10 +51,10 @@
     server: false,
     query: {
       page: 1,
-      limit: 2,
+      // limit: 2,
     },
   });
-  console.log("lastReleaseData", lastReleaseData);
+  // console.log("lastReleaseData", lastReleaseData);
   //定义数量
   const totalNum = ref(0);
   //定义展示的数据
@@ -70,7 +69,7 @@
       server: false,
       query: {
         page: val,
-        limit: 2,
+        // limit: 2,
       },
     });
     items.value = currentData.data;
