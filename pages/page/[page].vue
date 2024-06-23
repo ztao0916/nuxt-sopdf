@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <title>{{ route.params.key }}</title>
+    <title>SOPDF-工业产品PDF样册分享与内容搜索</title>
     <Meta
       name="description"
       content="工业产品PDF、目录、样册、手册、样本、型录、catalog、catalogue、datasheet分享与内容搜索"
@@ -11,7 +11,7 @@
     />
   </Head>
 
-  <div>翻页{{ JSON.stringify(route.params) }}</div>
+  <div>搜索详情页{{ JSON.stringify(route.params) }}</div>
 </template>
 <script lang="ts" setup>
   import { useRoute } from "vue-router";
