@@ -31,7 +31,13 @@
           <Items :items="items"></Items>
         </div>
       </div>
-      <div class="w-full bg-sopdf-600 py-1 px-2.5">分页</div>
+      <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end">
+        <el-pagination
+          layout="pager, next"
+          next-text="下一页"
+          :total="totalNum"
+        />
+      </div>
     </div>
   </div>
 </template>
