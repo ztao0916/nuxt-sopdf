@@ -46,7 +46,6 @@
 </template>
 
 <script lang="ts" setup>
-  const router = useRouter();
   const currentPage = ref(1) as any; //当前页
   //获取到首页数据
   const lastReleaseData: any = await $useFetch(`/lastRelease`, {
@@ -56,19 +55,30 @@
       limit: 2,
     },
   });
+  console.log("lastReleaseData", lastReleaseData);
   //定义数量
   const totalNum = ref(0);
   //定义展示的数据
   const items = ref([]) as any;
-  //如果lastReleaseData.code==200,就把total赋值给totalNum
   totalNum.value = lastReleaseData.total;
   items.value = lastReleaseData.data;
   //分页
   const handleCurrentChange = async (val: number) => {
     console.log(`current page: ${val}`);
     currentPage.value = val;
-    //分页请求接口没法更新页面,思考中?
+    const currentData: any = await $useFetch(`/lastRelease`, {
+      server: false,
+      query: {
+        page: val,
+        limit: 2,
+      },
+    });
+    items.value = currentData.data;
   };
+  //监听items变化
+  watch(currentPage, () => {
+    console.log(currentPage.value);
+  });
 </script>
 <style lang="css" scoped>
   .banner-img {

@@ -35,6 +35,8 @@
     countDown();
     showTime.value = true;
   };
+  //登录以后跳转到来时的页面
+  const router = useRouter();
 </script>
 
 <template>

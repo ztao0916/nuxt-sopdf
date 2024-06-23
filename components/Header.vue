@@ -45,12 +45,10 @@
 </template>
 
 <script setup>
-  const router = useRouter();
-
   // 如果需要，可以在这里导入外部依赖或声明props
   const searchContent = ref("");
   //searchContent如果是空,就提示搜索关键词不能为空
-  const searchHandle = () => {
+  const searchHandle = async () => {
     if (searchContent.value === "") {
       ElMessage({
         message: "搜索关键词不能为空",
@@ -58,7 +56,7 @@
       });
     } else {
       // 跳转到搜索结果页面,使用vue3语法
-      router.push(`/search/${searchContent.value}`);
+      await navigateTo(`/search/${searchContent.value}`);
     }
   };
 </script>
