@@ -1,7 +1,7 @@
 <template>
-  <div class="flex box-border mx-1 my-2 w-full">
+  <div class="box-border mx-1 my-2 w-full">
     <!-- 左侧展示图片 -->
-    <div class="w-3/4">
+    <div class="w-3/4 mr-[390px]">
       <div
         v-for="(item, index) in images"
         :key="index"
@@ -23,7 +23,7 @@
       </div>
     </div>
     <!-- 右侧展示信息 -->
-    <div class="flex-grow ml-3 sticky top-0 h-full">
+    <div class="fixed top-[66px] right-6 h-full z-20 w-96">
       <!-- 基本信息 -->
       <div
         class="w-full box-border bg-white flex border border-gray-400 border-solid"
@@ -89,8 +89,8 @@
             v-for="(item, index) in pdfContents"
             :key="item.id"
             class="content-item text-sm"
-            :class="{ 'active-item': sopdfObj.activeId == item.id }"
-            @click="scrollHandle(item.pageIndex, item.id)"
+            :class="{ 'active-item': sopdfObj.activeId == item.pageIndex }"
+            @click="scrollHandle(item.pageIndex)"
           >
             {{ "P" + item.pageIndex + "  " + item.name }}
           </div>
@@ -110,8 +110,6 @@
   const pdfContents = ref([]) as any;
   //定义渲染的pdf信息
   const pdfInfo = ref({}) as any;
-  //跳转过来的页码
-  const pageIndex = route.params.pageIndex;
   //请求接口获取数据
   const detailData: any = await $useFetch("/pdf/detail", {
     server: false,
@@ -127,14 +125,20 @@
   const commonUrl = runtimeConfig.public.commonUrl;
   //定位
   const sopdfObj = ref({}) as any;
-  const scrollHandle = (pageIndex: any, itemId: any) => {
-    sopdfObj.value.activeId = itemId;
+  const scrollHandle = (pageIndex: any) => {
+    sopdfObj.value.activeId = pageIndex;
     let id = `image${pageIndex}`;
     let targetDom: HTMLElement | null = document.getElementById(id);
     if (targetDom !== null) {
       targetDom.scrollIntoView();
     }
   };
+  //初始化定位-有问题,因为页面还没加载完成,怎么判断页面加载完成以后在执行这个代码呢?
+  onMounted(() => {
+    nextTick(async () => {
+      await scrollHandle(route.params.pageIndex);
+    });
+  });
 </script>
 
 <style lang="css" scoped>
