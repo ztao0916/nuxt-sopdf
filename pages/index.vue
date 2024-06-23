@@ -35,7 +35,8 @@
         <el-pagination
           layout="pager, next"
           next-text="下一页"
-          :total="1000"
+          :total="totalNum"
+          :default-page-size="2"
           v-model:current-page="currentPage"
           @current-change="handleCurrentChange"
         />
@@ -45,11 +46,14 @@
 </template>
 
 <script lang="ts" setup>
+  const router = useRouter();
+  const currentPage = ref(1) as any; //当前页
   //获取到首页数据
   const lastReleaseData: any = await $useFetch(`/lastRelease`, {
     server: false,
     query: {
       page: 1,
+      limit: 2,
     },
   });
   //定义数量
@@ -57,16 +61,14 @@
   //定义展示的数据
   const items = ref([]) as any;
   //如果lastReleaseData.code==200,就把total赋值给totalNum
-  if (lastReleaseData.code == 200) {
-    totalNum.value = lastReleaseData.total;
-    items.value = lastReleaseData.data;
-  }
+  totalNum.value = lastReleaseData.total;
+  items.value = lastReleaseData.data;
   //分页
-  const currentPage = ref(1); //当前页
-  const handleCurrentChange = (val: number) => {
+  const handleCurrentChange = async (val: number) => {
     console.log(`current page: ${val}`);
+    currentPage.value = val;
+    //分页请求接口没法更新页面,思考中?
   };
-  //如果分页currentPage发生变化,就重新请求接口给items重新赋值
 </script>
 <style lang="css" scoped>
   .banner-img {
