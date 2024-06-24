@@ -55,7 +55,8 @@
               <el-pagination
                 layout="pager, next"
                 next-text="下一页"
-                :default-page-size="1"
+                :hide-on-single-page="collectData?.total <= 20"
+                :default-page-size="20"
                 :total="collectData?.total || 0"
                 v-model:current-page="collectPage"
                 @current-change="handleCollectPageChange"
@@ -93,7 +94,8 @@
               <el-pagination
                 layout="pager, next"
                 next-text="下一页"
-                :default-page-size="1"
+                :hide-on-single-page="downloadData?.total <= 20"
+                :default-page-size="20"
                 :total="downloadData?.total || 0"
                 v-model:current-page="downPage"
                 @current-change="handleDownPageChange"
@@ -122,10 +124,9 @@
   const getMyCollectReq = useAsyncData("collectData", () =>
     $useFetch<Post>("/user/myCollect", {
       server: false,
-      cache: false,
       query: {
         page: collectPage.value,
-        limit: 1,
+        limit: 20,
       },
     })
   );
@@ -133,10 +134,9 @@
   const getMyDownloadReq = useAsyncData("downloadData", () =>
     $useFetch<Post>("/user/myDownload", {
       server: false,
-      cache: false,
       query: {
         page: downPage.value,
-        limit: 1,
+        limit: 20,
       },
     })
   );

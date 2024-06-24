@@ -3,7 +3,7 @@
     <!-- 左侧展示图片 -->
     <div class="w-3/4 mr-[390px]">
       <div
-        v-for="(item, index) in images"
+        v-for="(item, index) in detailData?.data.images"
         :key="index"
         :id="'image' + (index + 1)"
         class="flex box-border mb-1"
@@ -29,27 +29,41 @@
         class="w-full box-border bg-white flex border border-gray-400 border-solid"
       >
         <div class="pdf-info mr-2 flex-grow">
-          <div v-html="pdfInfo.pdfName" class="font-bold"></div>
+          <div v-html="detailData?.data.pdf.pdfName" class="font-bold"></div>
           <div class="text-gray-400 text-xs flex justify-between leading-8">
-            <span class="mx-3 flex-1">公司品牌: {{ pdfInfo.brand }}</span>
-            <span class="flex-1">文档页数: {{ pdfInfo.pdfPage }}</span>
+            <span class="mx-3 flex-1"
+              >公司品牌: {{ detailData?.data.pdf.brand }}</span
+            >
+            <span class="flex-1"
+              >文档页数: {{ detailData?.data.pdf.pdfPage }}</span
+            >
           </div>
           <div class="text-gray-400 text-xs flex justify-between leading-8">
-            <span class="mx-3 flex-1">文档大小: {{ pdfInfo.fileSize }}Mb</span>
-            <span class="flex-1">文档版本: {{ pdfInfo.pdfVersion }}</span>
+            <span class="mx-3 flex-1"
+              >文档大小: {{ detailData?.data.pdf.fileSize }}Mb</span
+            >
+            <span class="flex-1"
+              >文档版本: {{ detailData?.data.pdf.pdfVersion }}</span
+            >
           </div>
           <div class="text-gray-400 text-xs flex justify-between leading-8">
-            <span class="mx-3 flex-1">文档格式: {{ pdfInfo.pdfFormat }}</span>
-            <span class="flex-1">产品数量: {{ pdfInfo.productNum }}</span>
+            <span class="mx-3 flex-1"
+              >文档格式: {{ detailData?.data.pdf.pdfFormat }}</span
+            >
+            <span class="flex-1"
+              >产品数量: {{ detailData?.data.pdf.productNum }}</span
+            >
           </div>
           <div class="text-gray-400 leading-8 text-xs flex justify-between">
-            <span class="mx-3">收录时间: {{ pdfInfo.createTime }}</span>
+            <span class="mx-3"
+              >收录时间: {{ detailData?.data.pdf.createTime }}</span
+            >
             <span>&nbsp;</span>
           </div>
         </div>
         <div>
           <el-image
-            :src="commonUrl + pdfInfo.imageUrl"
+            :src="commonUrl + detailData?.data.pdf.imageUrl"
             class="w-[120px] h-[172px]"
             lazy
           >
@@ -70,23 +84,29 @@
       <div class="flex justify-between leading-6 text-gray-400 my-2">
         <div class="flex flex-1 text-sm">
           <SvgView class="w-4" />
-          <span>浏览{{ pdfInfo.viewCount }}</span>
+          <span>浏览{{ detailData?.data.pdf.viewCount }}</span>
         </div>
         <div class="flex flex-1 text-sm cursor-pointer" @click="collectHandle">
-          <SvgStar class="w-4" />
-          <span>收藏{{ pdfInfo.collectCount }}</span>
+          <SvgStar
+            class="w-4"
+            :class="{ 'text-sopdf-100': detailData?.data.collect }"
+          />
+          <span v-if="detailData?.data.collect" class="text-sopdf-100">
+            已收藏{{ detailData?.data.pdf.collectCount }}
+          </span>
+          <span v-else> 收藏{{ detailData?.data.pdf.collectCount }} </span>
         </div>
-        <div class="flex flex-1 text-sm cursor-pointer">
+        <div class="flex flex-1 text-sm cursor-pointer" @click="downloadHandle">
           <SvgDownload class="w-4" />
-          <span>下载{{ pdfInfo.downloadCount }}</span>
+          <span>下载{{ detailData?.data.pdf.downloadCount }}</span>
         </div>
       </div>
       <!-- 选型 -->
       <div class="bg-white border border-gray-400 p-2 detail-info mb-1">
-        <div v-html="pdfInfo.pdfName" class="font-bold"></div>
+        <div v-html="detailData?.data.pdf.pdfName" class="font-bold"></div>
         <div class="page-content ml-3 flex flex-col">
           <div
-            v-for="(item, index) in pdfContents"
+            v-for="(item, index) in detailData?.data.pdfContents"
             :key="item.id"
             class="content-item text-sm"
             :class="{ 'active-item': sopdfObj.activeId == item.pageIndex }"
@@ -107,14 +127,8 @@
   interface Post {
     [key: string]: any;
   }
-  //定义渲染的数据图片
-  const images = ref([]);
-  //定义渲染的数据内容页
-  const pdfContents = ref([]) as any;
-  //定义渲染的pdf信息
-  const pdfInfo = ref({}) as any;
   //请求接口获取数据
-  const { data: detailData } = await useAsyncData("detailData", () =>
+  const { data: detailData, refresh } = await useAsyncData("detailData", () =>
     $useFetch<Post>("/pdf/detail", {
       server: false,
       query: {
@@ -122,21 +136,64 @@
       },
     })
   );
-  images.value = detailData.value?.data.images;
-  pdfContents.value = detailData.value?.data.pdfContents;
-  pdfInfo.value = detailData.value?.data.pdf;
   //获取到环境变量
   const runtimeConfig = useRuntimeConfig();
   const commonUrl = runtimeConfig.public.commonUrl;
   //收藏事件
   const collectHandle = async () => {
-    let result: any = await $useFetch("/pdf/recard/collect", {
-      server: false,
-      query: {
-        uuid: route.params.uuid,
-      },
-    });
-    console.log(result);
+    if (detailData.value?.data.collect) {
+      //取消收藏
+      const res: any = await $useFetch("/pdf/recard/uncollect", {
+        server: false,
+        query: {
+          uuid: route.params.uuid,
+        },
+      });
+      if (res.code === 200) {
+        refresh();
+      }
+    } else {
+      //收藏
+      let result: any = await $useFetch("/pdf/recard/collect", {
+        server: false,
+        query: {
+          uuid: route.params.uuid,
+        },
+      });
+      if (result.code == 200) {
+        //收藏成功
+        refresh();
+      }
+    }
+  };
+  //下载事件
+  const downloadHandle = async () => {
+    let pdfData: any = await $useFetch(
+      `/pdf/pdfdownload/${route.params.uuid}.pdf`,
+      {
+        server: false,
+        responseType: "blob",
+        headers: {
+          "Content-Type": "application/pdf",
+        },
+      }
+    );
+    console.log(pdfData);
+    let fileName = detailData.value?.data.pdf.pdfName;
+    // 获取文件名
+    let objectUrl = URL.createObjectURL(new Blob([pdfData]));
+    // 文件地址
+    const link = document.createElement("a");
+    link.style.display = "none"; // 隐藏下载链接
+    document.body.appendChild(link); // 添加到DOM以便触发点击事件
+    link.download = fileName + ".pdf";
+    link.href = objectUrl;
+    link.click();
+    // 下载后清理
+    setTimeout(() => {
+      URL.revokeObjectURL(objectUrl);
+      link.remove(); // 移除临时创建的链接
+    }, 100);
   };
   //定位
   const sopdfObj = ref({}) as any;
