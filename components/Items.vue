@@ -1,13 +1,8 @@
 <script lang="ts" setup>
   //定义从父组件接收的数据
-  const props = defineProps({
-    //接收父组件传递过来的数据
-    items: {
-      type: Array,
-      default: () => [],
-    },
-  });
-  const data = ref(props.items) as any;
+  defineProps<{
+    items: any[];
+  }>();
 
   //获取到环境变量
   const runtimeConfig = useRuntimeConfig();
@@ -42,7 +37,7 @@
 <template>
   <!-- 遍历items,左右布局,左边为图片,右边为具体信息 -->
   <div
-    v-for="(item, outerIndex) in data"
+    v-for="(item, outerIndex) in items"
     :key="item.id"
     class="flex box-border mb-2.5"
   >

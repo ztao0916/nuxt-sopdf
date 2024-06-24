@@ -24,17 +24,15 @@ export const $useFetch = <T = unknown>(
     onResponse({ response }) {
       // console.log("response", response);
       if (+response.status === 200 && +response._data.code !== 200) {
-        import.meta.client && ElMessage.error(response._data.msg);
+        ElMessage.error(response._data.msg);
       }
     },
     onResponseError({ response }) {
       // console.log("responseerror", response);
-      import.meta.client &&
-        ElMessage.error(
-          isArray(response._data.msg)
-            ? response._data.msg[0]
-            : response._data.msg
-        );
+
+      ElMessage.error(
+        isArray(response._data.msg) ? response._data.msg[0] : response._data.msg
+      );
     },
   };
 

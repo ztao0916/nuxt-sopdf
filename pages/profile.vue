@@ -13,10 +13,17 @@
       </div>
     </div>
     <!-- 使用记录 -->
-    <div class="profile-record bg-sopdf-600 p-2">使用记录</div>
+    <div class="profile-record bg-sopdf-600 p-2">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="我的收藏" name="first">我的收藏</el-tab-pane>
+        <el-tab-pane label="我的下载" name="second">我的下载</el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
+  import type { TabsPaneContext } from "element-plus";
+
   //获取个人信息
   const allData: any = await Promise.all([
     $useFetch("/user/my", {
@@ -45,4 +52,9 @@
   //下载数据
   const downloadData = ref({}) as any;
   downloadData.value = allData[2];
+  //tab配置
+  const activeName = ref("first");
+  const handleClick = (tab: TabsPaneContext, event: Event) => {
+    console.log(tab, event);
+  };
 </script>

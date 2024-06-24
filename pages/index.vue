@@ -17,7 +17,9 @@
       <!-- 数量展示 -->
       <div class="w-full flex justify-between text-sopdf-400 text-xs mb-2">
         <div>
-          本站已收录<span class="text-sopdf-100">{{ totalNum }}</span
+          本站已收录<span class="text-sopdf-100">{{
+            lastReleaseData?.total
+          }}</span
           >份工业PDF样册
         </div>
         <div>
@@ -28,14 +30,15 @@
       <div class="w-full bg-sopdf-600 h-full py-1 px-2.5">
         <div>最新收录</div>
         <div class="items-container">
-          <Items :items="items"></Items>
+          <Items :items="lastReleaseData?.data"></Items>
         </div>
       </div>
       <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end">
         <el-pagination
           layout="pager, next"
           next-text="下一页"
-          :total="totalNum"
+          :default-page-size="2"
+          :total="lastReleaseData?.total"
           v-model:current-page="currentPage"
           @current-change="handleCurrentChange"
         />
@@ -45,39 +48,27 @@
 </template>
 
 <script lang="ts" setup>
-  const currentPage = ref(1) as any; //当前页
+  interface Post {
+    [key: string]: any;
+  }
+  const currentPage = ref(1); //当前页
   //获取到首页数据
-  const lastReleaseData: any = await $useFetch(`/lastRelease`, {
-    server: false,
-    query: {
-      page: 1,
-      // limit: 2,
-    },
-  });
-  // console.log("lastReleaseData", lastReleaseData);
-  //定义数量
-  const totalNum = ref(0);
-  //定义展示的数据
-  const items = ref([]) as any;
-  totalNum.value = lastReleaseData.total;
-  items.value = lastReleaseData.data;
+  const { data: lastReleaseData, refresh } = await useAsyncData(
+    "lastReleaseData",
+    () =>
+      $useFetch<Post>("/lastRelease", {
+        server: false,
+        query: {
+          page: currentPage.value,
+          limit: 2,
+        },
+      })
+  );
   //分页
   const handleCurrentChange = async (val: number) => {
-    console.log(`current page: ${val}`);
     currentPage.value = val;
-    const currentData: any = await $useFetch(`/lastRelease`, {
-      server: false,
-      query: {
-        page: val,
-        // limit: 2,
-      },
-    });
-    items.value = currentData.data;
+    refresh();
   };
-  //监听items变化
-  watch(currentPage, () => {
-    console.log(currentPage.value);
-  });
 </script>
 <style lang="css" scoped>
   .banner-img {
