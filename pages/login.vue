@@ -1,4 +1,13 @@
 <script lang="ts" setup>
+  definePageMeta({
+    middleware: [
+      () => {
+        if (useCookie<string | undefined>("satoken").value) {
+          return navigateTo("/");
+        }
+      },
+    ],
+  });
   //用户协议默认选中
   const selected = ref(true);
   //切换登录状态
@@ -37,7 +46,7 @@
   };
   //登录
   const phoneCookie = useCookie<string | undefined>("phone");
-  const loginHandle = () => {
+  const loginHandle = async () => {
     if (!import.meta.client) return;
     if (!code.value) {
       ElMessage({
@@ -45,23 +54,21 @@
         type: "error",
       });
     } else {
-      $useFetch("/user/login", {
+      await $useFetch("/user/login", {
         server: false,
         query: {
           phone: phoneNum.value,
           verificationCode: code.value,
         },
-      }).then((res: any) => {
-        if (res.code == 200) {
-          ElMessage({
-            message: "登录成功!",
-            type: "success",
-          });
-          phoneCookie.value = phoneNum.value;
-          //跳转回原来的页面
-          navigateTo(useRoute().query.redirect as string);
-        }
       });
+
+      ElMessage({
+        message: "登录成功!",
+        type: "success",
+      });
+      phoneCookie.value = phoneNum.value;
+      //跳转回原来的页面
+      navigateTo(useRoute().query.redirect as string);
     }
   };
 </script>

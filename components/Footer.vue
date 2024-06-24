@@ -8,7 +8,7 @@
         <p><NuxtLink to="/about">关于</NuxtLink></p>
         <p><NuxtLink to="/connect">联系</NuxtLink></p>
         <p>SOPDF版权所有</p>
-        <p>网站备案号: 苏ICP备2023016450号-1</p>
+        <p>网站备案号: 苏ICP备2024105340号-1</p>
       </div>
     </div>
   </footer>

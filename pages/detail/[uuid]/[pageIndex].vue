@@ -104,6 +104,9 @@
 <script lang="ts" setup>
   import { useRoute } from "vue-router";
   const route = useRoute();
+  interface Post {
+    [key: string]: any;
+  }
   //定义渲染的数据图片
   const images = ref([]);
   //定义渲染的数据内容页
@@ -111,15 +114,17 @@
   //定义渲染的pdf信息
   const pdfInfo = ref({}) as any;
   //请求接口获取数据
-  const detailData: any = await $useFetch("/pdf/detail", {
-    server: false,
-    query: {
-      uuid: route.params.uuid,
-    },
-  });
-  images.value = detailData.data.images;
-  pdfContents.value = detailData.data.pdfContents;
-  pdfInfo.value = detailData.data.pdf;
+  const { data: detailData } = await useAsyncData("detailData", () =>
+    $useFetch<Post>("/pdf/detail", {
+      server: false,
+      query: {
+        uuid: route.params.uuid,
+      },
+    })
+  );
+  images.value = detailData.value?.data.images;
+  pdfContents.value = detailData.value?.data.pdfContents;
+  pdfInfo.value = detailData.value?.data.pdf;
   //获取到环境变量
   const runtimeConfig = useRuntimeConfig();
   const commonUrl = runtimeConfig.public.commonUrl;

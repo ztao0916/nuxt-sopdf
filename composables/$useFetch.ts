@@ -1,9 +1,5 @@
 import { type UseFetchOptions } from "#app";
 
-function isArray(str: unknown) {
-  return Object.prototype.toString.call(str) === "[object Array]";
-}
-
 export const $useFetch = <T = unknown>(
   url: string,
   opts: UseFetchOptions<T, unknown>
@@ -24,15 +20,12 @@ export const $useFetch = <T = unknown>(
     onResponse({ response }) {
       // console.log("response", response);
       if (+response.status === 200 && +response._data.code !== 200) {
-        ElMessage.error(response._data.msg);
+        ElMessage.error(response._data.message || response._data.error);
       }
     },
     onResponseError({ response }) {
       // console.log("responseerror", response);
-
-      ElMessage.error(
-        isArray(response._data.msg) ? response._data.msg[0] : response._data.msg
-      );
+      ElMessage.error(response._data.message || response._data.error);
     },
   };
 
