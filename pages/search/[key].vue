@@ -15,18 +15,18 @@
       <!-- 数量展示 -->
       <div class="w-full bg-sopdf-600 h-full py-1 px-2.5">
         <div class="w-full my-2 text-xs text-sopdf-400">
-          找到<span class="text-red-600">{{ totalNum }}</span
+          找到<span class="text-red-600">{{ searchData?.total }}</span
           >个结果:
         </div>
         <div class="items-container">
-          <Items :items="items"></Items>
+          <Items :items="searchData?.data"></Items>
         </div>
       </div>
       <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end">
         <el-pagination
           layout="pager, next"
           next-text="下一页"
-          :total="1000"
+          :total="searchData?.total"
           v-model:current-page="currentPage"
           @current-change="handleCurrentChange"
         />
@@ -35,31 +35,27 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { useRoute } from "vue-router";
+  interface Post {
+    [key: string]: any;
+  }
   const route = useRoute();
-  console.log(route.params);
+  const currentPage = ref(1); //当前页码
   //请求接口
   //获取到首页数据
-  const searchData: any = await $useFetch(`/search`, {
-    server: false,
-    query: {
-      key: route.params.key, //参数是搜索的内容
-      page: 1,
-    },
-  });
-  //定义数量
-  const totalNum = ref(0);
-  //定义展示的数据
-  const items = ref([]) as any;
-  //如果searchData.code==200,就把total赋值给totalNum
-  if (searchData.code == 200) {
-    totalNum.value = searchData.total;
-    items.value = searchData.data;
-  }
+  const { data: searchData, refresh } = await useAsyncData("searchData", () =>
+    $useFetch<Post>("/search", {
+      server: false,
+      query: {
+        key: route.params.key, //参数是搜索的内容
+        page: currentPage.value,
+        // limit: 2,
+      },
+    })
+  );
   //分页
-  const currentPage = ref(1); //当前页
   const handleCurrentChange = (val: number) => {
-    console.log(`current page: ${val}`);
+    // console.log(`current page: ${val}`);
+    currentPage.value = val;
+    refresh();
   };
-  //如果分页currentPage发生变化,就重新请求接口给items重新赋值
 </script>

@@ -37,7 +37,6 @@
         <el-pagination
           layout="pager, next"
           next-text="下一页"
-          :default-page-size="2"
           :total="lastReleaseData?.total"
           v-model:current-page="currentPage"
           @current-change="handleCurrentChange"
@@ -60,7 +59,6 @@
         server: false,
         query: {
           page: currentPage.value,
-          limit: 2,
         },
       })
   );
