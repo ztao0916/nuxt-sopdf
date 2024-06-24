@@ -1,17 +1,7 @@
 export default defineNuxtRouteMiddleware(() => {
-  const isLoggedIn = useState("isLoggedIn", () => false);
+  const token = useCookie("satoken");
 
-  if (import.meta.server) {
-    const sessionToken = useCookie("satoken");
-    console.log("satoken", sessionToken.value);
-    if (sessionToken.value !== undefined) {
-      isLoggedIn.value = true;
-    }
+  if (!token?.value) {
+    return navigateTo("/login");
   }
-
-  if (isLoggedIn.value) {
-    return;
-  }
-
-  return navigateTo("/login");
 });

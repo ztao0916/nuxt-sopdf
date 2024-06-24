@@ -30,9 +30,9 @@
     }, 1000);
   };
   //发送验证码
-  const phoneNum = ref("18238833070");
-  const code = ref("SDSF5WEFDSG34");
-  const sendCodeHandle = () => {
+  const phoneNum = ref("");
+  const code = ref("");
+  const sendCodeHandle = async () => {
     //如果没有手机号码,不允许发送,并提醒
     if (!phoneNum.value) {
       ElMessage({
@@ -41,6 +41,16 @@
       });
       return;
     }
+    await $useFetch("/user/verificationCode", {
+      server: false,
+      query: {
+        phone: phoneNum.value,
+      },
+    });
+    ElMessage({
+      message: "验证码已发送!",
+      type: "success",
+    });
     countDown();
     showTime.value = true;
   };

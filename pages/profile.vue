@@ -23,7 +23,9 @@
 </template>
 <script lang="ts" setup>
   import type { TabsPaneContext } from "element-plus";
-
+  definePageMeta({
+    middleware: ["auth"],
+  });
   interface Post {
     [key: string]: any;
   }
