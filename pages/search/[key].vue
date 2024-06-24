@@ -26,6 +26,7 @@
         <el-pagination
           layout="pager, next"
           next-text="下一页"
+          :default-page-size="10"
           :total="searchData?.total"
           v-model:current-page="currentPage"
           @current-change="handleCurrentChange"
@@ -48,7 +49,7 @@
       query: {
         key: route.params.key, //参数是搜索的内容
         page: currentPage.value,
-        // limit: 2,
+        limit: 10,
       },
     })
   );

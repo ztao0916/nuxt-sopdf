@@ -14,40 +14,160 @@
     </div>
     <!-- 使用记录 -->
     <div class="profile-record bg-sopdf-600 p-2">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="我的收藏" name="first">我的收藏</el-tab-pane>
-        <el-tab-pane label="我的下载" name="second">我的下载</el-tab-pane>
+      <el-tabs v-model="activeName">
+        <el-tab-pane label="我的收藏" name="first">
+          <client-only>
+            <el-table :data="collectData?.data" class="w-[800px]" size="small">
+              <el-table-column prop="createTime" label="收藏时间" width="200" />
+              <el-table-column
+                prop="pdfName"
+                label="样册名称"
+                width="320"
+                show-overflow-tooltip
+              >
+                <template #default="scope">
+                  <NuxtLink
+                    :to="'/detail/' + scope.row.uuid + '/1'"
+                    class="text-blue-500"
+                  >
+                    {{ scope.row.pdfName }}
+                  </NuxtLink>
+                </template>
+              </el-table-column>
+              <el-table-column prop="fileSize" label="大小">
+                <template #default="scope">
+                  {{ scope.row.fileSize }}Mb
+                </template>
+              </el-table-column>
+              <el-table-column prop="pdfPage" label="页数" />
+              <el-table-column label="操作">
+                <template #default="scope">
+                  <div
+                    class="cursor-pointer text-blue-400"
+                    @click="cancelCollectHandle(scope.row.uuid)"
+                  >
+                    取消收藏
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end">
+              <el-pagination
+                layout="pager, next"
+                next-text="下一页"
+                :default-page-size="1"
+                :total="collectData?.total || 0"
+                v-model:current-page="collectPage"
+                @current-change="handleCollectPageChange"
+              />
+            </div>
+          </client-only>
+        </el-tab-pane>
+        <el-tab-pane label="我的下载" name="second">
+          <client-only>
+            <el-table :data="downloadData?.data" class="w-[800px]" size="small">
+              <el-table-column prop="createTime" label="下载时间" width="200" />
+              <el-table-column
+                prop="pdfName"
+                label="样册名称"
+                width="320"
+                show-overflow-tooltip
+              >
+                <template #default="scope">
+                  <NuxtLink
+                    :to="'/detail/' + scope.row.uuid + '/1'"
+                    class="text-blue-500"
+                  >
+                    {{ scope.row.pdfName }}
+                  </NuxtLink>
+                </template>
+              </el-table-column>
+              <el-table-column prop="fileSize" label="大小">
+                <template #default="scope">
+                  {{ scope.row.fileSize }}Mb
+                </template>
+              </el-table-column>
+              <el-table-column prop="pdfPage" label="页数" />
+            </el-table>
+            <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end">
+              <el-pagination
+                layout="pager, next"
+                next-text="下一页"
+                :default-page-size="1"
+                :total="downloadData?.total || 0"
+                v-model:current-page="downPage"
+                @current-change="handleDownPageChange"
+              />
+            </div>
+          </client-only>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-  import type { TabsPaneContext } from "element-plus";
   definePageMeta({
     middleware: ["auth"],
   });
   interface Post {
     [key: string]: any;
   }
+  const downPage = ref(1);
+  const collectPage = ref(1);
   //单个请求处理-个人信息数据
   const getMyReq = useServerRequest<Post>("/user/my", {
     server: false,
   });
   //单个请求处理-收藏数据
-  const getMyCollectReq = useServerRequest<Post>("/user/myCollect", {
-    server: false,
-  });
+  const getMyCollectReq = useAsyncData("collectData", () =>
+    $useFetch<Post>("/user/myCollect", {
+      server: false,
+      cache: false,
+      query: {
+        page: collectPage.value,
+        limit: 1,
+      },
+    })
+  );
   //单个请求处理-下载数据
-  const getMyDownloadReq = useServerRequest<Post>("/user/myDownload", {
-    server: false,
-  });
+  const getMyDownloadReq = useAsyncData("downloadData", () =>
+    $useFetch<Post>("/user/myDownload", {
+      server: false,
+      cache: false,
+      query: {
+        page: downPage.value,
+        limit: 1,
+      },
+    })
+  );
   //获取个人信息
   const [{ data: userData }, { data: collectData }, { data: downloadData }] =
     await Promise.all([getMyReq, getMyCollectReq, getMyDownloadReq]);
 
   //tab配置
+  //取消收藏功能
+  const cancelCollectHandle = async (uuid: string) => {
+    const res: any = await $useFetch("/pdf/recard/uncollect", {
+      server: false,
+      query: {
+        uuid,
+      },
+    });
+    if (res.code === 200) {
+      getMyCollectReq.refresh();
+    }
+  };
   const activeName = ref("first");
-  const handleClick = (tab: TabsPaneContext, event: Event) => {
-    console.log(tab);
+  //下载分页
+  const handleDownPageChange = async (page: number) => {
+    console.log(page);
+    downPage.value = page;
+    getMyDownloadReq.refresh();
+  };
+  //收藏分页
+  const handleCollectPageChange = async (page: number) => {
+    console.log(page);
+    collectPage.value = page;
+    getMyCollectReq.refresh();
   };
 </script>
