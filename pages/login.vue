@@ -32,6 +32,8 @@
   //发送验证码
   const phoneNum = ref("");
   const code = ref("");
+  const token: any = useToken();
+  const phoneState = usePhoneState();
   const sendCodeHandle = async () => {
     //如果没有手机号码,不允许发送,并提醒
     if (!phoneNum.value) {
@@ -41,6 +43,7 @@
       });
       return;
     }
+    showTime.value = true;
     await $useFetch("/user/verificationCode", {
       server: false,
       query: {
@@ -52,7 +55,6 @@
       type: "success",
     });
     countDown();
-    showTime.value = true;
   };
   //登录
   const phoneCookie = useCookie<string | undefined>("phone");
@@ -77,6 +79,8 @@
         type: "success",
       });
       phoneCookie.value = phoneNum.value;
+      phoneState.value = phoneNum.value;
+      token.value = useCookie("satoken");
       //跳转回原来的页面
       navigateTo(useRoute().query.redirect as string);
     }

@@ -38,7 +38,7 @@
         <NuxtLink
           to="/login"
           class="flex justify-end items-center"
-          v-if="!satoken"
+          v-if="!token"
         >
           <div class="mr-1">登录/注册</div>
           <SvgUserAvatar class="text-[30px]" />
@@ -80,7 +80,8 @@
   };
   //获取到是否有cookie
   const satoken = useCookie("satoken");
-  const phone = useCookie("phone");
+  const phone = usePhoneState("phone");
+  const token = useToken("token");
   // @command="handleCommand"
   const handleCommand = (command) => {
     console.log(command);
@@ -95,7 +96,9 @@
   };
   const logOut = () => {
     satoken.value = "";
+    token.value = "";
     phone.value = "";
+    useCookie("phone").value = "";
     ElMessage({
       message: "退出成功",
       type: "success",
