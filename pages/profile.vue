@@ -121,25 +121,22 @@
     server: false,
   });
   //单个请求处理-收藏数据
-  const getMyCollectReq = useAsyncData("collectData", () =>
-    $useFetch<Post>("/user/myCollect", {
-      server: false,
-      query: {
-        page: collectPage.value,
-        limit: 20,
-      },
-    })
-  );
+  const getMyCollectReq = useServerRequest<Post>("/user/myCollect", {
+    server: false,
+    query: {
+      page: collectPage.value,
+      limit: 20,
+    },
+  });
+
   //单个请求处理-下载数据
-  const getMyDownloadReq = useAsyncData("downloadData", () =>
-    $useFetch<Post>("/user/myDownload", {
-      server: false,
-      query: {
-        page: downPage.value,
-        limit: 20,
-      },
-    })
-  );
+  const getMyDownloadReq = useServerRequest<Post>("/user/myDownload", {
+    server: false,
+    query: {
+      page: downPage.value,
+      limit: 20,
+    },
+  });
   //获取个人信息
   const [{ data: userData }, { data: collectData }, { data: downloadData }] =
     await Promise.all([getMyReq, getMyCollectReq, getMyDownloadReq]);
