@@ -21,13 +21,13 @@ export const useServerRequest = <T = unknown>(
       // console.log("response", response);
       if (+response.status === 200 && +response._data.code !== 200) {
         import.meta.client &&
-          ElMessage.error(response._data.message || response._data.error);
+          ElMessage.error(response._data.msg || "服务器返回错误");
       }
     },
     onResponseError({ response }) {
       // console.log("responseerror", response);
       import.meta.client &&
-        ElMessage.error(response._data.message || response._data.error);
+        ElMessage.error(response._data.msg || "服务器返回错误");
     },
   };
 

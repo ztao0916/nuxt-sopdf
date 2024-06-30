@@ -20,12 +20,12 @@ export const $useFetch = <T = unknown>(
     onResponse({ response }) {
       // console.log("response", response);
       if (+response.status === 200 && +response._data.code !== 200) {
-        ElMessage.error(response._data.message || response._data.error);
+        ElMessage.error(response._data.msg || "服务器返回错误");
       }
     },
     onResponseError({ response }) {
       // console.log("responseerror", response);
-      ElMessage.error(response._data.message || response._data.error);
+      ElMessage.error(response._data.msg || "服务器返回错误");
     },
   };
 

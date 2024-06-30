@@ -66,23 +66,26 @@
         type: "error",
       });
     } else {
-      await $useFetch("/user/login", {
+      const res: any = await $useFetch("/user/login", {
         server: false,
         query: {
           phone: phoneNum.value,
           verificationCode: code.value,
         },
       });
-
-      ElMessage({
-        message: "登录成功!",
-        type: "success",
-      });
-      phoneCookie.value = phoneNum.value;
-      phoneState.value = phoneNum.value;
-      token.value = useCookie("satoken");
-      //跳转回原来的页面
-      navigateTo(useRoute().query.redirect as string);
+      if (res.code == 200) {
+        ElMessage({
+          message: "登录成功!",
+          type: "success",
+        });
+        phoneCookie.value = phoneNum.value;
+        phoneState.value = phoneNum.value;
+        token.value = useCookie("satoken");
+        //跳转回原来的页面
+        navigateTo(useRoute().query.redirect as string);
+      } else {
+        console.log("失败res", res);
+      }
     }
   };
 </script>
