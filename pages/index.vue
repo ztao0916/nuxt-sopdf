@@ -30,7 +30,7 @@
       <div class="w-full bg-sopdf-600 h-full py-1 px-2.5">
         <div>最新收录</div>
         <div class="items-container">
-          <Items :items="lastReleaseData?.data"></Items>
+          <Items :items="lastReleaseData?.data" v-if="lastReleaseData"></Items>
         </div>
       </div>
       <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end">
@@ -38,7 +38,7 @@
           layout="pager, next"
           next-text="下一页"
           :default-page-size="10"
-          :total="lastReleaseData?.total"
+          :total="lastReleaseData?.total || 0"
           v-model:current-page="currentPage"
           @current-change="handleCurrentChange"
         />
@@ -52,17 +52,19 @@
     [key: string]: any;
   }
   const currentPage = ref(1); //当前页
+  const queryBody = computed(() => {
+    return {
+      page: currentPage.value,
+      limit: 10,
+    };
+  });
   //获取到首页数据
-  const { data: lastReleaseData, refresh } = await useAsyncData(
-    "lastReleaseData",
-    () =>
-      $useFetch<Post>("/lastRelease", {
-        server: false,
-        query: {
-          page: currentPage.value,
-          limit: 10,
-        },
-      })
+  const { data: lastReleaseData, refresh } = await useServerRequest<Post>(
+    "/lastRelease",
+    {
+      server: false,
+      query: queryBody,
+    }
   );
   //分页
   const handleCurrentChange = async (val: number) => {
