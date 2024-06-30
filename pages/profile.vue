@@ -116,6 +116,20 @@
   }
   const downPage = ref(1);
   const collectPage = ref(1);
+
+  const collectBody = computed(() => {
+    return {
+      page: collectPage.value,
+      limit: 20,
+    };
+  });
+  //必须把请求参数独立出来,不知道原因
+  const downloadBody = computed(() => {
+    return {
+      page: downPage.value,
+      limit: 20,
+    };
+  });
   //单个请求处理-个人信息数据
   const getMyReq = useServerRequest<Post>("/user/my", {
     server: false,
@@ -123,19 +137,13 @@
   //单个请求处理-收藏数据
   const getMyCollectReq = useServerRequest<Post>("/user/myCollect", {
     server: false,
-    query: {
-      page: collectPage.value,
-      limit: 20,
-    },
+    query: collectBody,
   });
 
   //单个请求处理-下载数据
   const getMyDownloadReq = useServerRequest<Post>("/user/myDownload", {
     server: false,
-    query: {
-      page: downPage.value,
-      limit: 20,
-    },
+    query: downloadBody,
   });
   //获取个人信息
   const [{ data: userData }, { data: collectData }, { data: downloadData }] =
@@ -163,7 +171,6 @@
   };
   //收藏分页
   const handleCollectPageChange = async (page: number) => {
-    console.log(page);
     collectPage.value = page;
     getMyCollectReq.refresh();
   };
