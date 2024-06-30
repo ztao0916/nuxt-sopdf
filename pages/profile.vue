@@ -165,7 +165,7 @@
   const activeName = ref("first");
   //下载分页
   const handleDownPageChange = async (page: number) => {
-    console.log(page);
+    // console.log(page);
     downPage.value = page;
     getMyDownloadReq.refresh();
   };

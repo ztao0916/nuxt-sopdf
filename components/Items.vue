@@ -59,7 +59,9 @@
     <!-- 右边具体信息 -->
     <div class="item-info">
       <!-- 标题 -->
-      <div class="font-bold two-line-ellipsis" v-html="item.pdfName"></div>
+      <NuxtLink :to="/detail/ + item.uuid + '/1'">
+        <div class="font-bold two-line-ellipsis" v-html="item.pdfName"></div>
+      </NuxtLink>
       <!-- 产品信息 -->
       <div class="ml-1.5 text-xs two-line-ellipsis text-[#d9d9d9]">
         <span class="mr-3">公司品牌: {{ item.brand }};</span>
