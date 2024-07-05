@@ -8,18 +8,7 @@
         :id="'image' + (index + 1)"
         class="flex box-border mb-1"
       >
-        <el-image :src="commonUrl + item" class="w-full" lazy>
-          <template #error>
-            <!-- 加载assets/img/common.jpg -->
-            <div>
-              <img
-                src="@/assets/img/common.jpg"
-                alt="default-image"
-                class="w-full"
-              />
-            </div>
-          </template>
-        </el-image>
+        <div class="h-96"></div>
       </div>
     </div>
     <!-- 右侧展示信息 -->
@@ -200,14 +189,38 @@
   const scrollHandle = (pageIndex: any) => {
     sopdfObj.value.activeId = pageIndex;
     let id = `image${pageIndex}`;
-    let targetDom: HTMLElement | null = document.getElementById(id);
+    let idPrev = `image${+pageIndex - 1}`;
+    let idNext = `image${+pageIndex + 1}`;
+
+    let targetDom: any = document.getElementById(id);
+    let targetPrevDom: any = document.getElementById(idPrev);
+    let targetNextDom: any = document.getElementById(idNext);
     if (targetDom !== null) {
+      targetDom.classList.add("detail-bg-img");
+      //设置背景图
+      targetDom.style.backgroundImage = `url(${
+        commonUrl + detailData.value?.data.images[+pageIndex - 1]
+      })`;
+
       targetDom.scrollIntoView();
+    }
+    if (targetPrevDom !== null) {
+      targetPrevDom.classList.add("detail-bg-img");
+      targetPrevDom.style.backgroundImage = `url(${
+        commonUrl + detailData.value?.data.images[+pageIndex - 2]
+      })`;
+    }
+    if (targetNextDom !== null) {
+      targetNextDom.classList.add("detail-bg-img");
+      targetNextDom.style.backgroundImage = `url(${
+        commonUrl + detailData.value?.data.images[+pageIndex]
+      })`;
     }
   };
   //初始化定位-有问题,因为页面还没加载完成,怎么判断页面加载完成以后在执行这个代码呢?
   onMounted(() => {
     nextTick(async () => {
+      console.log(route.params.pageIndex);
       await scrollHandle(route.params.pageIndex);
     });
   });
@@ -244,5 +257,13 @@
   .active-item {
     background-color: #ffc000 !important;
     color: #fff;
+  }
+
+  .detail-bg-img {
+    width: 100%; /* 设置div宽度为100% */
+    background-image: url("@/assets/img/banner.jpg"); /* 引入图片路径，记得处理URL路径问题 */
+    background-repeat: no-repeat; /* 图片平铺并覆盖整个div，可能会裁剪图片以适应 */
+    background-position: center; /* 图片位置居中 */
+    background-size: 100% 100%; /* 强制图片宽度和高度完全拉伸以适应div尺寸 */
   }
 </style>
