@@ -85,7 +85,11 @@
           </span>
           <span v-else> 收藏{{ detailData?.data.pdf.collectCount }} </span>
         </div>
-        <div class="flex flex-1 text-sm cursor-pointer" @click="downloadHandle">
+        <div
+          class="flex flex-1 text-sm cursor-pointer"
+          v-loading.fullscreen.lock="fullscreenLoading"
+          @click="downloadHandle"
+        >
           <SvgDownload class="w-4" />
           <span>下载{{ detailData?.data.pdf.downloadCount }}</span>
         </div>
@@ -156,33 +160,41 @@
     }
   };
   //下载事件
+  const fullscreenLoading = ref(false);
   const downloadHandle = async () => {
-    let pdfData: any = await $useFetch(
-      `/pdf/pdfdownload/${route.params.uuid}.pdf`,
-      {
-        server: false,
-        responseType: "blob",
-        headers: {
-          "Content-Type": "application/pdf",
-        },
-      }
-    );
-    console.log(pdfData);
-    let fileName = detailData.value?.data.pdf.pdfName;
-    // 获取文件名
-    let objectUrl = URL.createObjectURL(new Blob([pdfData]));
-    // 文件地址
-    const link = document.createElement("a");
-    link.style.display = "none"; // 隐藏下载链接
-    document.body.appendChild(link); // 添加到DOM以便触发点击事件
-    link.download = fileName + ".pdf";
-    link.href = objectUrl;
-    link.click();
-    // 下载后清理
-    setTimeout(() => {
-      URL.revokeObjectURL(objectUrl);
-      link.remove(); // 移除临时创建的链接
-    }, 100);
+    fullscreenLoading.value = true;
+    try {
+      let pdfData: any = await $useFetch(
+        `/pdf/pdfdownload/${route.params.uuid}.pdf`,
+        {
+          server: false,
+          responseType: "blob",
+          headers: {
+            "Content-Type": "application/pdf",
+          },
+        }
+      );
+      console.log(pdfData);
+      let fileName = detailData.value?.data.pdf.pdfName;
+      // 获取文件名
+      let objectUrl = URL.createObjectURL(new Blob([pdfData]));
+      // 文件地址
+      const link = document.createElement("a");
+      link.style.display = "none"; // 隐藏下载链接
+      document.body.appendChild(link); // 添加到DOM以便触发点击事件
+      link.download = fileName + ".pdf";
+      link.href = objectUrl;
+      link.click();
+      fullscreenLoading.value = false;
+      // 下载后清理
+      setTimeout(() => {
+        URL.revokeObjectURL(objectUrl);
+        link.remove(); // 移除临时创建的链接
+      }, 100);
+    } catch (err) {
+      console.log("下载失败", err);
+      fullscreenLoading.value = false;
+    }
   };
   //定位
   const sopdfObj = ref({}) as any;
