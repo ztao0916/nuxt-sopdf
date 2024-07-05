@@ -8,7 +8,7 @@
         :id="'image' + (index + 1)"
         class="flex box-border mb-1"
       >
-        <div class="h-96"></div>
+        <div class="h-[666px]"></div>
       </div>
     </div>
     <!-- 右侧展示信息 -->
