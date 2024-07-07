@@ -1,5 +1,5 @@
 <template>
-  <div class="box-border mx-1 my-2 w-full">
+  <div class="box-border mx-1 my-2 w-full h-full">
     <!-- 左侧展示图片 -->
     <div class="w-3/4 mr-[390px]">
       <div
@@ -8,7 +8,10 @@
         :id="'image' + (index + 1)"
         class="flex box-border mb-1"
       >
-        <div class="h-[666px]"></div>
+        <div
+          class="h-[666px] detail-bg-img"
+          :style="{ backgroundImage: 'url(' + commonUrl + getSrc(index) + ')' }"
+        ></div>
       </div>
     </div>
     <!-- 右侧展示信息 -->
@@ -103,7 +106,7 @@
             :key="item.id"
             class="content-item text-sm"
             :class="{ 'active-item': sopdfObj.activeId == item.pageIndex }"
-            @click="scrollHandle(item.pageIndex)"
+            @click="clickToLocateHandle(item.pageIndex)"
           >
             {{ "P" + item.pageIndex + "  " + item.name }}
           </div>
@@ -196,45 +199,115 @@
       fullscreenLoading.value = false;
     }
   };
-  //定位
-  const sopdfObj = ref({}) as any;
-  const scrollHandle = (pageIndex: any) => {
-    sopdfObj.value.activeId = pageIndex;
-    let id = `image${pageIndex}`;
-    let idPrev = `image${+pageIndex - 1}`;
-    let idNext = `image${+pageIndex + 1}`;
+  // 滚动和定位
+  const loadedImages = ref<number[]>([]);
+  const scrollableArea = ref<any>(null);
 
-    let targetDom: any = document.getElementById(id);
-    let targetPrevDom: any = document.getElementById(idPrev);
-    let targetNextDom: any = document.getElementById(idNext);
-    if (targetDom !== null) {
-      targetDom.classList.add("detail-bg-img");
-      //设置背景图
-      targetDom.style.backgroundImage = `url(${
-        commonUrl + detailData.value?.data.images[+pageIndex - 1]
-      })`;
+  //检查图片是否已加载
+  const isLoaded = (index: any) => {
+    return loadedImages.value.includes(index);
+  };
 
-      targetDom.scrollIntoView();
-    }
-    if (targetPrevDom !== null) {
-      targetPrevDom.classList.add("detail-bg-img");
-      targetPrevDom.style.backgroundImage = `url(${
-        commonUrl + detailData.value?.data.images[+pageIndex - 2]
-      })`;
-    }
-    if (targetNextDom !== null) {
-      targetNextDom.classList.add("detail-bg-img");
-      targetNextDom.style.backgroundImage = `url(${
-        commonUrl + detailData.value?.data.images[+pageIndex]
-      })`;
+  //获取图片的src,只有当图片加载的时候才返回真实的src
+  const getSrc = (index: any) =>
+    isLoaded(index) ? detailData.value?.data.images[index] : "";
+  const mainElement = import.meta.client && document.querySelector("main");
+  const handleScroll = () => {
+    if (mainElement) {
+      const { scrollTop, clientHeight } = scrollableArea.value;
+      const images = detailData.value?.data.images;
+      const imageHeights = images.map(() => 666); //每张图片高666px
+      images.forEach((_: any, index: any) => {
+        const top = imageHeights
+          .slice(0, index)
+          .reduce((acc: any, curr: any) => acc + curr, 0);
+        const bottom = top + imageHeights[index];
+        if (scrollTop + clientHeight >= top && scrollTop < bottom) {
+          if (!isLoaded(index)) {
+            loadedImages.value.push(index);
+            getSrc(index);
+          }
+        }
+      });
     }
   };
-  //初始化定位-有问题,因为页面还没加载完成,怎么判断页面加载完成以后在执行这个代码呢?
+  //点击定位功能
+  const sopdfObj = ref({}) as any;
+  const clickToLocateHandle = (pageIndex: any) => {
+    sopdfObj.value.activeId = pageIndex;
+    let id = `image${pageIndex}`;
+    let targetDom: any = document.getElementById(id);
+    if (targetDom !== null) {
+      targetDom.scrollIntoView();
+      //加载附近的背景图,如果在 loadedImages.value 不存在,就push进去
+      //当前图
+      if (!loadedImages.value.includes(+pageIndex - 1)) {
+        loadedImages.value.push(+pageIndex - 1);
+        getSrc(+pageIndex - 1);
+      }
+      //后两张
+      if (
+        +pageIndex + 1 <= detailData.value?.data.images.length &&
+        !loadedImages.value.includes(+pageIndex + 1)
+      ) {
+        loadedImages.value.push(+pageIndex + 1);
+        getSrc(+pageIndex + 1);
+      }
+      //后一张
+      if (!loadedImages.value.includes(+pageIndex)) {
+        loadedImages.value.push(+pageIndex);
+        getSrc(+pageIndex);
+      }
+      //前一张
+      if (+pageIndex - 2 >= 0 && !loadedImages.value.includes(+pageIndex - 2)) {
+        loadedImages.value.push(+pageIndex - 2);
+        getSrc(+pageIndex - 2);
+      }
+      //前两张
+      if (+pageIndex - 3 >= 0 && !loadedImages.value.includes(+pageIndex - 3)) {
+        loadedImages.value.push(+pageIndex - 3);
+        getSrc(+pageIndex - 3);
+      }
+    }
+  };
+  //初始化定位
   onMounted(() => {
-    nextTick(async () => {
-      console.log(route.params.pageIndex);
-      await scrollHandle(route.params.pageIndex);
-    });
+    //给loadedImages赋值,为route.params.pageIndex-1,如果大于2,就route.params.pageIndex-2,
+    loadedImages.value = [+route.params.pageIndex - 1];
+    if (+route.params.pageIndex >= 2) {
+      loadedImages.value.unshift(+route.params.pageIndex - 2);
+    }
+    if (+route.params.pageIndex >= 3) {
+      loadedImages.value.unshift(+route.params.pageIndex - 3);
+    }
+    loadedImages.value.push(+route.params.pageIndex);
+    //不能超过detailData.value?.data.images.length
+    if (+route.params.pageIndex + 1 <= detailData.value?.data.images.length) {
+      loadedImages.value.push(+route.params.pageIndex + 1);
+    }
+    getSrc(+route.params.pageIndex);
+    getSrc(+route.params.pageIndex - 1);
+    if (+route.params.pageIndex + 1 <= detailData.value?.data.images.length) {
+      getSrc(+route.params.pageIndex + 1);
+    }
+    if (+route.params.pageIndex >= 2) {
+      getSrc(+route.params.pageIndex - 2);
+    }
+    if (+route.params.pageIndex >= 3) {
+      getSrc(+route.params.pageIndex - 3);
+    }
+
+    clickToLocateHandle(route.params.pageIndex);
+
+    if (mainElement) {
+      scrollableArea.value = mainElement;
+      mainElement.addEventListener("scroll", handleScroll);
+    }
+  });
+  onUnmounted(() => {
+    if (mainElement) {
+      mainElement.removeEventListener("scroll", handleScroll);
+    }
   });
 </script>
 
@@ -270,7 +343,6 @@
     background-color: #ffc000 !important;
     color: #fff;
   }
-
   .detail-bg-img {
     width: 100%; /* 设置div宽度为100% */
     background-image: url("@/assets/img/banner.jpg"); /* 引入图片路径，记得处理URL路径问题 */
