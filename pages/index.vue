@@ -33,11 +33,13 @@
           <Items :items="lastReleaseData?.data" v-if="lastReleaseData"></Items>
         </div>
       </div>
-      <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end text-xs">
+      <div
+        class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end text-xs dashboard-pagination"
+      >
         <el-pagination
           layout="pager, next"
           next-text="下一页"
-          background
+          size="small"
           :default-page-size="10"
           :total="lastReleaseData?.total || 0"
           v-model:current-page="currentPage"
@@ -80,5 +82,12 @@
     background-repeat: no-repeat; /* 图片平铺并覆盖整个div，可能会裁剪图片以适应 */
     background-position: center; /* 图片位置居中 */
     background-size: 100% 100%; /* 强制图片宽度和高度完全拉伸以适应div尺寸 */
+  }
+  .dashboard-pagination :deep(.el-pagination) {
+    --el-pagination-bg-color: none;
+  }
+  .dashboard-pagination :deep(.el-pagination .btn-next.is-last) {
+    background-color: #f2f2f2;
+    color: rgb(35, 35, 35);
   }
 </style>

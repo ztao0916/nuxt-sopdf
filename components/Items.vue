@@ -10,7 +10,7 @@
   //定义展开状态的索引
   const expandIndexArr = ref([]) as any;
   //定义函数,限制item.pdfcontents的长度不超过10
-  const showContent = (contents: any, index: any) => {
+  const showContent = (contents: any = [], index: any) => {
     const limit = 10; // 每个item的显示限制
     if (expandIndexArr.value.includes(index)) {
       return contents;
@@ -18,7 +18,7 @@
     return contents.slice(0, limit);
   };
   //判断是否应该显示展开按钮
-  const showExpandBtn = (contents: any, index: any) => {
+  const showExpandBtn = (contents: any = [], index: any) => {
     const limit = 10;
     return contents.length > limit && !expandIndexArr.value.includes(index);
   };

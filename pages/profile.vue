@@ -51,10 +51,13 @@
                 </template>
               </el-table-column>
             </el-table>
-            <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end">
+            <div
+              class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end profile-pagination"
+            >
               <el-pagination
                 layout="pager, next"
                 next-text="下一页"
+                size="small"
                 :hide-on-single-page="collectData?.total <= 20"
                 :default-page-size="20"
                 :total="collectData?.total || 0"
@@ -90,10 +93,13 @@
               </el-table-column>
               <el-table-column prop="pdfPage" label="页数" />
             </el-table>
-            <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end">
+            <div
+              class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end profile-pagination"
+            >
               <el-pagination
                 layout="pager, next"
                 next-text="下一页"
+                size="small"
                 :hide-on-single-page="downloadData?.total <= 20"
                 :default-page-size="20"
                 :total="downloadData?.total || 0"
@@ -175,3 +181,12 @@
     getMyCollectReq.refresh();
   };
 </script>
+<style lang="css" scoped>
+  .profile-pagination :deep(.el-pagination) {
+    --el-pagination-bg-color: none;
+  }
+  .profile-pagination :deep(.el-pagination .btn-next.is-last) {
+    background-color: #f2f2f2;
+    color: rgb(35, 35, 35);
+  }
+</style>
