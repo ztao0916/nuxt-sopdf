@@ -93,7 +93,7 @@
 <template>
   <div class="w-full h-full flex justify-center items-center">
     <div
-      class="bg-white w-80 h-60 flex flex-col p-4 box-border justify-between border-8 border-sopdf-600"
+      class="bg-white w-80 h-60 flex flex-col p-4 box-border justify-between border-8 border-sopdf-600 mt-[-100px] ml-[-18px]"
     >
       <div class="login-title cursor-pointer">
         <span
