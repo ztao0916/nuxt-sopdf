@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[800px] bg-white mt-5 h-fit p-2 box-border">
+  <div class="w-[800px] bg-white mt-5 h-fit p-4 box-border">
     <p class="font-bold text-lg text-center leading-10">SOPDF用户协议:</p>
     <p class="indent-8 break-all text-base">
       SOPDF.CN（以下简称“本站”）是由工业从业者和爱好者自发创建的内容分享平台，是工业产品PDF/手册/样本/样册/型录/Catalogs/Datasheets（以下简称“PDF样册”）的内容搜索网站。本站收集各类工业产品的PDF样册，对PDF样册内容进行数据梳理，进而为各类研发工程师、设计工程师、科研人员、高校师生及行业从业者提供高效的产品内容检索服务。
@@ -60,6 +60,10 @@
     </div>
     <div class="break-all text-base">
       4.2 本站保留对上述所有条款及未尽事项的最终解释权。
+    </div>
+    <div class="break-all text-base">
+      4.3
+      本站接受用户建议、申诉、维权、咨询、合作洽谈的唯一官方途径是邮箱：sopdfservice@163.com。
     </div>
     <div class="break-all text-base text-right">SOPDF.CN 2024年2月14日</div>
   </div>

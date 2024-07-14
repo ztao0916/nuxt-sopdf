@@ -33,10 +33,11 @@
           <Items :items="lastReleaseData?.data" v-if="lastReleaseData"></Items>
         </div>
       </div>
-      <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end">
+      <div class="w-full bg-sopdf-600 py-1 px-2.5 flex justify-end text-xs">
         <el-pagination
           layout="pager, next"
           next-text="下一页"
+          background
           :default-page-size="10"
           :total="lastReleaseData?.total || 0"
           v-model:current-page="currentPage"

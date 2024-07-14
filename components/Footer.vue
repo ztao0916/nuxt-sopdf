@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="bg-sopdf-700 border-box fixed bottom-0 w-full z-10 h-5 text-xs flex justify-center items-center"
+    class="bg-sopdf-700 border-box fixed bottom-0 w-full z-10 h-8 text-xs flex justify-center items-center"
   >
     <!-- 这里放置你的底部内容，如版权信息、联系方式等 -->
     <div class="w-[800px] flex justify-center items-center">

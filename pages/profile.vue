@@ -17,7 +17,7 @@
       <el-tabs v-model="activeName">
         <el-tab-pane label="我的收藏" name="first">
           <client-only>
-            <el-table :data="collectData?.data" class="w-[800px]" size="small">
+            <el-table :data="collectData?.data" class="w-[800px]">
               <el-table-column prop="createTime" label="收藏时间" width="200" />
               <el-table-column
                 prop="pdfName"
@@ -66,7 +66,7 @@
         </el-tab-pane>
         <el-tab-pane label="我的下载" name="second">
           <client-only>
-            <el-table :data="downloadData?.data" class="w-[800px]" size="small">
+            <el-table :data="downloadData?.data" class="w-[800px]">
               <el-table-column prop="createTime" label="下载时间" width="200" />
               <el-table-column
                 prop="pdfName"

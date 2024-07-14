@@ -47,8 +47,8 @@
           <el-dropdown trigger="click" @command="handleCommand">
             <div class="el-dropdown-link flex leading-8 text-white">
               <span>{{ phone }}</span>
-              <SvgCaretBottom class="w-4 text-white mt-2.5"></SvgCaretBottom>
-              <SvgUserAvatar class="text-[30px]" />
+              <SvgCaretBottom class="w-4 text-white"></SvgCaretBottom>
+              <SvgUserAvatar class="text-[20px]" />
             </div>
             <template #dropdown>
               <el-dropdown-menu>

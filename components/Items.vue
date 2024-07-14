@@ -39,11 +39,14 @@
   <div
     v-for="(item, outerIndex) in items"
     :key="item.id"
-    class="flex box-border mb-2.5"
+    class="flex box-border mb-6"
   >
     <!-- 左边图片 -->
     <div class="item-img mr-1.5">
-      <el-image :src="commonUrl + item.imageUrl" class="w-[120px] h-[172px]">
+      <el-image
+        :src="commonUrl + item.imageUrl"
+        class="w-[120px] h-[172px] border-2"
+      >
         <template #error>
           <!-- 加载assets/img/common.jpg -->
           <div>

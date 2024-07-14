@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[800px] bg-white mt-5 h-fit p-2 border-box">
+  <div class="w-[800px] bg-white mt-5 h-fit p-4 border-box">
     <p class="font-bold text-lg">联系SOPDF:</p>
     <p class="indent-8 break-all text-base lh30">
       PDF样册发布、广告位合作、侵权PDF样册处理、PDF样册勘误、意见或建议，请发送邮件至邮箱：
