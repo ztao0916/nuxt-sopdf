@@ -22,12 +22,12 @@
         >
           <input
             placeholder="请输入产品名称,品牌或者公司名"
-            class="outline-0 pl-4 rounded-2xl text-black flex-grow"
+            class="outline-0 pl-4 rounded-2xl text-black flex-grow text-xs"
             v-model="searchContent"
           />
           <button
             type="button"
-            class="bg-sopdf-100 w-20 m-1 rounded-2xl search-btn"
+            class="bg-sopdf-100 w-20 m-1 rounded-2xl search-btn text-xs"
             @click="searchHandle()"
           >
             搜索
@@ -37,11 +37,11 @@
       <div class="flex-grow text-right">
         <NuxtLink
           to="/login"
-          class="flex justify-end items-center"
+          class="flex justify-end items-center text-xs"
           v-if="!token"
         >
           <div class="mr-1">登录/注册</div>
-          <SvgUserAvatar class="text-[30px]" />
+          <SvgUserAvatar class="text-[20px]" />
         </NuxtLink>
         <div v-else class="flex justify-end items-center">
           <el-dropdown trigger="click" @command="handleCommand">
@@ -114,13 +114,14 @@
     width: 69px;
     height: 26px;
     line-height: 26px;
-    border-radius: 0px 16px 16px 0px;
+    border-radius: 16px;
   }
   .logo-background {
-    width: 100px; /* 设置div宽度为100px */
+    width: 110px; /* 设置div宽度为100px */
     background-image: url("@/assets/img/logo.jpg"); /* 引入图片路径，记得处理URL路径问题 */
     background-repeat: no-repeat; /* 图片平铺并覆盖整个div，可能会裁剪图片以适应 */
     background-position: center; /* 图片位置居中 */
-    background-size: 100% 100%; /* 强制图片宽度和高度完全拉伸以适应div尺寸 */
+    background-size: 110% 150%; /* 强制图片宽度和高度完全拉伸以适应div尺寸 */
+    margin-top: 9px;
   }
 </style>

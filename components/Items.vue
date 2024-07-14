@@ -60,10 +60,13 @@
     <div class="item-info">
       <!-- 标题 -->
       <NuxtLink :to="/detail/ + item.uuid + '/1'">
-        <div class="font-bold two-line-ellipsis" v-html="item.pdfName"></div>
+        <div
+          class="font-bold two-line-ellipsis text-sopdf-500 text-sm"
+          v-html="item.pdfName"
+        ></div>
       </NuxtLink>
       <!-- 产品信息 -->
-      <div class="ml-1.5 text-xs two-line-ellipsis text-[#d9d9d9]">
+      <div class="ml-1.5 text-sm two-line-ellipsis text-sopdf-400">
         <span class="mr-3">公司品牌: {{ item.brand }};</span>
         <span class="mr-3">文档页数: {{ item.pdfPage }};</span>
         <span class="mr-3">文档大小: {{ item.fileSize }}M;</span>
