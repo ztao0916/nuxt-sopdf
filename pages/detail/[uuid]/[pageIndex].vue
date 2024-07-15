@@ -10,7 +10,9 @@
       >
         <div
           class="h-[666px] detail-bg-img"
-          :style="{ backgroundImage: 'url(' + commonUrl + getSrc(index) + ')' }"
+          :style="{
+            backgroundImage: 'url(' + commonUrl + getSrc(index) + ')',
+          }"
         ></div>
       </div>
     </div>
@@ -18,45 +20,48 @@
     <div class="fixed top-[66px] right-6 h-full z-20 w-96">
       <!-- 基本信息 -->
       <div
-        class="w-full box-border bg-white flex border border-gray-400 border-solid"
+        class="w-full box-border bg-white flex border-sopdf-400 border-solid border"
       >
-        <div class="pdf-info mr-2 flex-grow">
-          <div v-html="detailData?.data.pdf.pdfName" class="font-bold"></div>
-          <div class="text-gray-400 text-xs flex justify-between leading-8">
-            <span class="mx-3 flex-1"
-              >公司品牌: {{ detailData?.data.pdf.brand }}</span
-            >
-            <span class="flex-1"
-              >文档页数: {{ detailData?.data.pdf.pdfPage }}</span
-            >
-          </div>
-          <div class="text-gray-400 text-xs flex justify-between leading-8">
-            <span class="mx-3 flex-1"
-              >文档大小: {{ detailData?.data.pdf.fileSize }}Mb</span
-            >
-            <span class="flex-1"
-              >文档版本: {{ detailData?.data.pdf.pdfVersion }}</span
-            >
-          </div>
-          <div class="text-gray-400 text-xs flex justify-between leading-8">
-            <span class="mx-3 flex-1"
-              >文档格式: {{ detailData?.data.pdf.pdfFormat }}</span
-            >
-            <span class="flex-1"
-              >产品数量: {{ detailData?.data.pdf.productNum }}</span
-            >
-          </div>
-          <div class="text-gray-400 leading-8 text-xs flex justify-between">
-            <span class="mx-3"
-              >收录时间: {{ detailData?.data.pdf.createTime }}</span
-            >
-            <span>&nbsp;</span>
-          </div>
-        </div>
-        <div>
+        <client-only>
+          <table class="info-table text-xs text-sopdf-400 flex-1">
+            <tr>
+              <td rowspan="3" colspan="4">
+                <div
+                  v-html="detailData?.data.pdf.pdfName"
+                  class="font-bold text-sopdf-500 multi-line-ellipsis"
+                ></div>
+              </td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+              <td>公司品牌:</td>
+              <td>{{ detailData?.data.pdf.brand }}</td>
+              <td>文档页数:</td>
+              <td>{{ detailData?.data.pdf.pdfPage }}</td>
+            </tr>
+            <tr>
+              <td>文档大小:</td>
+              <td>{{ detailData?.data.pdf.fileSize }}Mb</td>
+              <td>文档版本:</td>
+              <td>{{ detailData?.data.pdf.pdfVersion }}</td>
+            </tr>
+            <tr>
+              <td>文档格式:</td>
+              <td>{{ detailData?.data.pdf.pdfFormat }}</td>
+              <td>产品数量:</td>
+              <td>{{ detailData?.data.pdf.productNum }}</td>
+            </tr>
+            <tr>
+              <td>收录时间:</td>
+              <td colspan="3">{{ detailData?.data.pdf.createTime }}</td>
+            </tr>
+          </table>
+        </client-only>
+        <div class="w-[120px] h-[172px]">
           <el-image
             :src="commonUrl + detailData?.data.pdf.imageUrl"
-            class="w-[120px] h-[172px]"
+            class="w-full h-full"
             lazy
           >
             <template #error>
@@ -349,5 +354,30 @@
     background-repeat: no-repeat; /* 图片平铺并覆盖整个div，可能会裁剪图片以适应 */
     background-position: center; /* 图片位置居中 */
     background-size: 100% 100%; /* 强制图片宽度和高度完全拉伸以适应div尺寸 */
+  }
+  .info-table {
+    width: 100%;
+    border-collapse: collapse; /* 确保边框不会重叠 */
+    border-spacing: 0; /* 消除单元格之间的间距 */
+  }
+
+  .info-table td {
+    border: 1px solid #ddd; /* 单元格的边框 */
+    padding: 1px;
+  }
+  .info-table tr:first-child td {
+    border-top: none;
+  }
+  .info-table tr:last-child td {
+    border-bottom: none;
+  }
+  .info-table td:first-child {
+    border-left: none;
+  }
+  .multi-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 显示的行数 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 </style>
