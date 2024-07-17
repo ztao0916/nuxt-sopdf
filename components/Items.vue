@@ -17,6 +17,10 @@
     }
     return contents.slice(0, limit);
   };
+  //获取item.pdfContents第一项的id
+  const firstId = (contents: any = []) => {
+    return contents.length > 0 && contents[0].id;
+  };
   //判断是否应该显示展开按钮
   const showExpandBtn = (contents: any = [], index: any) => {
     const limit = 10;
@@ -62,7 +66,7 @@
     <!-- 右边具体信息 -->
     <div class="item-info">
       <!-- 标题 -->
-      <NuxtLink :to="/detail/ + item.uuid + '/1'">
+      <NuxtLink :to="/detail/ + item.uuid + '/1-' + firstId(item.pdfContents)">
         <div
           class="font-bold two-line-ellipsis text-sopdf-500 text-sm"
           v-html="item.pdfName"
@@ -88,7 +92,9 @@
         >
           <NuxtLink
             class="text-blue-500 leading-5 border-b border-blue-500"
-            :to="/detail/ + item.uuid + '/' + content.pageIndex"
+            :to="
+              /detail/ + item.uuid + '/' + content.pageIndex + '-' + content.id
+            "
           >
             <span class="mr-1.5">第{{ content.pageIndex }}页</span>
             <span v-html="content.name"></span>

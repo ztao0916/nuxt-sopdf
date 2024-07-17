@@ -110,8 +110,12 @@
             v-for="(item, index) in detailData?.data.pdfContents"
             :key="item.id"
             class="content-item text-sm"
-            :class="{ 'active-item': sopdfObj.activeId == item.pageIndex }"
-            @click="clickToLocateHandle(item.pageIndex)"
+            :class="{
+              'active-item':
+                sopdfObj.activeId == item.pageIndex &&
+                sopdfObj.itemId == item.id,
+            }"
+            @click="clickToLocateHandle(item.pageIndex, item.id)"
           >
             {{ "P" + item.pageIndex + "  " + item.name }}
           </div>
@@ -238,8 +242,9 @@
   };
   //点击定位功能
   const sopdfObj = ref({}) as any;
-  const clickToLocateHandle = (pageIndex: any) => {
+  const clickToLocateHandle = (pageIndex: any, itemId: any) => {
     sopdfObj.value.activeId = pageIndex;
+    sopdfObj.value.itemId = itemId;
     let id = `image${pageIndex}`;
     let targetDom: any = document.getElementById(id);
     if (targetDom !== null) {
@@ -277,32 +282,34 @@
   };
   //初始化定位
   onMounted(() => {
+    let pageIndex = +((route.params.pageIndex as string) || "").split("-")[0];
+    let currentId = +((route.params.pageIndex as string) || "").split("-")[1];
     //给loadedImages赋值,为route.params.pageIndex-1,如果大于2,就route.params.pageIndex-2,
-    loadedImages.value = [+route.params.pageIndex - 1];
-    if (+route.params.pageIndex >= 2) {
-      loadedImages.value.unshift(+route.params.pageIndex - 2);
+    loadedImages.value = [pageIndex - 1];
+    if (pageIndex >= 2) {
+      loadedImages.value.unshift(pageIndex - 2);
     }
-    if (+route.params.pageIndex >= 3) {
-      loadedImages.value.unshift(+route.params.pageIndex - 3);
+    if (pageIndex >= 3) {
+      loadedImages.value.unshift(pageIndex - 3);
     }
-    loadedImages.value.push(+route.params.pageIndex);
+    loadedImages.value.push(pageIndex);
     //不能超过detailData.value?.data.images.length
-    if (+route.params.pageIndex + 1 <= detailData.value?.data.images.length) {
-      loadedImages.value.push(+route.params.pageIndex + 1);
+    if (pageIndex + 1 <= detailData.value?.data.images.length) {
+      loadedImages.value.push(pageIndex + 1);
     }
-    getSrc(+route.params.pageIndex);
-    getSrc(+route.params.pageIndex - 1);
-    if (+route.params.pageIndex + 1 <= detailData.value?.data.images.length) {
-      getSrc(+route.params.pageIndex + 1);
+    getSrc(pageIndex);
+    getSrc(pageIndex - 1);
+    if (pageIndex + 1 <= detailData.value?.data.images.length) {
+      getSrc(pageIndex + 1);
     }
-    if (+route.params.pageIndex >= 2) {
-      getSrc(+route.params.pageIndex - 2);
+    if (pageIndex >= 2) {
+      getSrc(pageIndex - 2);
     }
-    if (+route.params.pageIndex >= 3) {
-      getSrc(+route.params.pageIndex - 3);
+    if (pageIndex >= 3) {
+      getSrc(pageIndex - 3);
     }
 
-    clickToLocateHandle(route.params.pageIndex);
+    clickToLocateHandle(pageIndex, currentId);
 
     if (mainElement) {
       scrollableArea.value = mainElement;
