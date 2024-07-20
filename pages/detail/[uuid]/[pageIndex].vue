@@ -8,7 +8,7 @@
         :id="'image' + (index + 1)"
         class="flex box-border mb-1"
       >
-        <div class="h-[666px]">
+        <div class="h-[666px] w-full">
           <el-image
             class="w-full h-auto"
             :src="commonUrl + getSrc(index)"

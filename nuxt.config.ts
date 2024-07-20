@@ -2,7 +2,7 @@
 //别名@,默认内置
 import { defineNuxtConfig } from "nuxt/config";
 //转发服务器
-const commonUrl = "http://122.51.119.99/api";
+const commonUrl = "https://sopdf.cn/api";
 export default defineNuxtConfig({
   ssr: true,
   devtools: { enabled: false },
