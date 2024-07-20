@@ -8,12 +8,17 @@
         :id="'image' + (index + 1)"
         class="flex box-border mb-1"
       >
-        <div
-          class="h-[666px] detail-bg-img"
-          :style="{
-            backgroundImage: 'url(' + commonUrl + getSrc(index) + ')',
-          }"
-        ></div>
+        <div class="h-[666px]">
+          <el-image
+            class="w-full h-auto"
+            :src="commonUrl + getSrc(index)"
+            fit="fill"
+          >
+            <template #placeholder>
+              <div class="image-slot">Loading<span class="dot">...</span></div>
+            </template>
+          </el-image>
+        </div>
       </div>
     </div>
     <!-- 右侧展示信息 -->
