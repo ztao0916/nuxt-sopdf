@@ -6,7 +6,11 @@ const commonUrl = "https://sopdf.cn/api";
 export default defineNuxtConfig({
   ssr: true,
   devtools: { enabled: false },
-  modules: ["@nuxt/ui", "@element-plus/nuxt"],
+  modules: ["@nuxt/ui", "@element-plus/nuxt", "@nuxtjs/sitemap"],
+  site: {
+    url: "https://sopdf.cn",
+    name: "sopdf",
+  },
   //项目是前后端分离的,所以要做代理转发,解决跨域问题
   nitro: {
     devProxy: {
